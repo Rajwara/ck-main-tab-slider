@@ -1,0 +1,820 @@
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<style>
+    body {
+        margin: 0px;
+        padding: 0px;
+    }
+    
+    .glyphicon-chevron-left:before {
+        content: "\e079"
+    }
+    
+    .glyphicon-chevron-right:before {
+        content: "\e080"
+    }
+    
+    .container {
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto
+    }
+    
+    @media (min-width:768px) {
+        .container {
+            width: 750px
+        }
+    }
+    
+    @media (min-width:992px) {
+        .container {
+            width: 970px
+        }
+    }
+    
+    @media (min-width:1200px) {
+        .container {
+            width: 1170px
+        }
+    }
+    
+    .container-fluid {
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto
+    }
+    
+    .carousel {
+        position: relative
+    }
+    
+    .carousel-inner {
+        position: relative;
+        width: 100%;
+        overflow: hidden
+    }
+    
+    .carousel-inner>.item {
+        position: relative;
+        display: none;
+        -webkit-transition: .6s ease-in-out left;
+        -o-transition: .6s ease-in-out left;
+        transition: .6s ease-in-out left
+    }
+    
+    .carousel-inner>.item>img,
+    .carousel-inner>.item>a>img {
+        line-height: 1
+    }
+    
+    @media all and (transform-3d),
+    (-webkit-transform-3d) {
+        .carousel-inner>.item {
+            -webkit-transition: -webkit-transform .6s ease-in-out;
+            -o-transition: -o-transform .6s ease-in-out;
+            transition: transform .6s ease-in-out;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-perspective: 1000;
+            perspective: 1000
+        }
+        .carousel-inner>.item.next,
+        .carousel-inner>.item.active.right {
+            left: 0;
+            -webkit-transform: translate3d(100%, 0, 0);
+            transform: translate3d(100%, 0, 0)
+        }
+        .carousel-inner>.item.prev,
+        .carousel-inner>.item.active.left {
+            left: 0;
+            -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-100%, 0, 0)
+        }
+        .carousel-inner>.item.next.left,
+        .carousel-inner>.item.prev.right,
+        .carousel-inner>.item.active {
+            left: 0;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0)
+        }
+    }
+    
+    .carousel-inner>.active,
+    .carousel-inner>.next,
+    .carousel-inner>.prev {
+        display: block
+    }
+    
+    .carousel-inner>.active {
+        left: 0
+    }
+    
+    .carousel-inner>.next,
+    .carousel-inner>.prev {
+        position: absolute;
+        top: 0;
+        width: 100%
+    }
+    
+    .carousel-inner>.next {
+        left: 100%
+    }
+    
+    .carousel-inner>.prev {
+        left: -100%
+    }
+    
+    .carousel-inner>.next.left,
+    .carousel-inner>.prev.right {
+        left: 0
+    }
+    
+    .carousel-inner>.active.left {
+        left: -100%
+    }
+    
+    .carousel-inner>.active.right {
+        left: 100%
+    }
+    
+    .carousel-control:hover,
+    .carousel-control:focus {
+        color: #fff;
+        text-decoration: none;
+        filter: alpha(opacity=90);
+        outline: 0;
+        opacity: .9
+    }
+    
+    .carousel-control .icon-prev,
+    .carousel-control .icon-next,
+    .carousel-control .glyphicon-chevron-left,
+    .carousel-control .glyphicon-chevron-right {
+        position: absolute;
+        top: 50%;
+        z-index: 5;
+        display: inline-block
+    }
+    
+    .carousel-control .icon-prev,
+    .carousel-control .glyphicon-chevron-left {
+        left: 50%;
+        margin-left: -10px
+    }
+    
+    .carousel-control .icon-next,
+    .carousel-control .glyphicon-chevron-right {
+        right: 50%;
+        margin-right: -10px
+    }
+    
+    .carousel-control .icon-prev,
+    .carousel-control .icon-next {
+        width: 20px;
+        height: 20px;
+        margin-top: -10px;
+    }
+    
+    .carousel-control .icon-prev:before {
+        content: '\2039'
+    }
+    
+    .carousel-control .icon-next:before {
+        content: '\203a'
+    }
+    
+    .carousel-indicators {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        z-index: 15;
+        width: 60%;
+        padding-left: 0;
+        margin-left: -30%;
+        text-align: center;
+        list-style: none
+    }
+    
+    .carousel-indicators li {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin: 1px;
+        text-indent: -999px;
+        cursor: pointer;
+        background-color: #000 \9;
+        background-color: rgba(0, 0, 0, 0);
+        border: 1px solid #fff;
+        border-radius: 10px
+    }
+    
+    .carousel-indicators .active {
+        width: 12px;
+        height: 12px;
+        margin: 0;
+        background-color: #fff
+    }
+    
+    .carousel-caption {
+        position: absolute;
+        right: 15%;
+        bottom: 20px;
+        left: 15%;
+        z-index: 10;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        color: #fff;
+        text-align: center;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, .6)
+    }
+    
+    .carousel-caption .btn {
+        text-shadow: none
+    }
+    
+    #custom_carousel .item {
+        color: #000;
+        /*background-image: linear-gradient(90deg, rgba(253, 105, 132, 0.08) 0%, rgba(247, 158, 129, 0.08) 100%);
+            */
+        padding: 0px;
+        background: #fff5f4;
+        height: 70vh;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    #custom_carousel .controls {
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 0;
+        margin: 0;
+        white-space: nowrap;
+        text-align: center;
+        position: relative;
+        background: #faccbd;
+    }
+    
+    #custom_carousel .controls li {
+        padding-top: 10px;
+        display: table-cell;
+        width: 1%;
+        max-width: 90px;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+    
+    ul.tabs-nav {
+        margin: 0px;
+        padding: 0px;
+    }
+    
+    #custom_carousel .controls li.active {
+        background-color: #faccbd;
+        border-bottom: 2px solid #FB497D;
+        color: #FB497D !important;
+    }
+    
+    #custom_carousel .controls a small {
+        overflow: hidden;
+        display: block;
+        margin-top: 5px;
+        font-weight: bold
+    }
+    
+    .tab-slider-slides-wrapper {
+        display: flex !important;
+        align-content: space-between;
+        align-items: center;
+        justify-content: center;
+        text-align: left !important;
+        height: 70vh;
+    }
+    
+    .tab-slider-content-div {
+        margin: 30px !important;
+        width: 50%;
+    }
+    
+    .tab-slider-img-div {
+        width: 50%;
+    }
+    
+    .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+        z-index: 8;
+        font-family: "Playfair Display";
+        height: auto;
+        color: rgb(12, 12, 12);
+        text-decoration: none;
+        white-space: normal;
+        min-height: 0px;
+        min-width: 0px;
+        max-height: none;
+        max-width: none;
+        text-align: left;
+        line-height: 69px;
+        letter-spacing: 0px;
+        font-weight: 900;
+        font-size: 63px;
+        transform-origin: 50% 50%;
+        opacity: 1;
+        transform: translate(0px, 0px);
+        visibility: visible;
+    }
+    
+    .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
+        z-index: 9;
+        font-family: "Playfair Display";
+        height: auto;
+        color: rgb(12, 12, 12);
+        text-decoration: none;
+        white-space: normal;
+        min-height: 0px;
+        min-width: 0px;
+        max-height: none;
+        max-width: none;
+        text-align: left;
+        line-height: 30px;
+        letter-spacing: 0px;
+        font-weight: 400;
+        font-size: 20px;
+        transform-origin: 50% 50%;
+        opacity: 1;
+        transform: translate(0px, 0px);
+        visibility: visible;
+    }
+    
+    .center-text {
+        display: flex;
+        justify-content: center;
+        /* Centers horizontally */
+        align-items: center;
+        /* Centers vertically */
+        /* Ensure the container has a height */
+        text-align: center;
+        /* Ensures the text is centered inside */
+    }
+    
+    .carousel-control {
+        height: 1px;
+        position: absolute;
+        top: 92%;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        font-size: 20px;
+        color: #fff;
+        text-align: center;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+        filter: alpha(opacity=50);
+        opacity: 100%;
+        z-index: 1;
+    }
+    
+    img.glyphicon.glyphicon-chevron-lef {
+        left: 5% !important;
+        position: absolute;
+        top: 92%;
+    }
+    
+    img.glyphicon.glyphicon-chevron-right {
+        right: 5%;
+        top: 94%;
+    }
+    
+    .app-redirection-link-img {
+        z-index: 12;
+        color: rgb(255, 255, 255);
+        width: 209.995px;
+        height: 64.3851px;
+        min-height: 0px;
+        min-width: 0px;
+        max-height: none;
+        max-width: none;
+        transform-origin: 50% 50%;
+        opacity: 1;
+        transform: translate(0px, 0px);
+        visibility: visible;
+    }
+    
+    .app-redirection-link-img-wrapper {
+        gap: 10px;
+        display: flex;
+        margin: 20px 0px 20px 0px;
+    }
+    
+    @media screen and (min-width: 2560px) {
+        .carousel-control {
+            top: 94%;
+        }
+    }
+    
+    @media screen and (min-width:1024px) and (max-width:1249px) {
+        img.glyphicon.glyphicon-chevron-lef {
+            left: 1% !important;
+            width: 15px;
+        }
+        img.glyphicon.glyphicon-chevron-right {
+            right: 1%;
+            margin-right: 0px !important;
+            width: 15px;
+        }
+    }
+    
+    @media screen and (min-width:1250px) and (max-width:1439px) {
+        img.glyphicon.glyphicon-chevron-lef {
+            left: 2% !important;
+        }
+        img.glyphicon.glyphicon-chevron-right {
+            right: 2%;
+        }
+    }
+    
+    @media screen and (min-width:1440px) and (max-width:1700px) {
+        img.glyphicon.glyphicon-chevron-lef {
+            left: 2% !important;
+        }
+        img.glyphicon.glyphicon-chevron-right {
+            right: 2%;
+        }
+    }
+    
+    @media screen and (min-width: 769px) and (max-width: 1024px) {
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+            font-size: 3.5rem !important;
+            font-weight: 800;
+            line-height: 4rem !important;
+            margin-bottom: 20px;
+            padding: 0px;
+        }
+    }
+    
+    @media screen and (min-width:426px) and (max-width:768px) {
+        .carousel-control {
+            top: 94%;
+        }
+        #custom_carousel .item,
+        .tab-slider-slides-wrapper {
+            height: auto;
+        }
+        .tab-slider-content-div,
+        .tab-slider-img-div {
+            width: 100%;
+        }
+        #custom_carousel .controls li {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        .tab-slider-content-div {
+            margin: 0px !important;
+            margin-top: 40px !important;
+            margin-bottom: 50px !important;
+        }
+        .tab-slider-slides-wrapper {
+            display: block !important;
+        }
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+            font-size: 4.5rem !important;
+            line-height: 4.5rem !important;
+            text-align: center;
+            margin-bottom: 30px !important;
+        }
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
+            text-align: center;
+            width: 80%;
+            margin: 0px auto;
+        }
+        .app-redirection-link-img-wrapper {
+            justify-content: center;
+            margin-bottom: 30px !important;
+        }
+    }
+    
+    @media screen and (min-width:376px) and (max-width:425px) {
+        img.glyphicon.glyphicon-chevron-right {
+            right: 2%;
+            margin-right: 0px;
+            width: 20px;
+        }
+        img.glyphicon.glyphicon-chevron-lef {
+            left: 2% !important;
+            width: 20px;
+        }
+        .carousel-control {
+            top: 93%;
+        }
+        #custom_carousel .item,
+        .tab-slider-slides-wrapper {
+            height: auto;
+        }
+        .tab-slider-content-div,
+        .tab-slider-img-div {
+            width: 100%;
+        }
+        #custom_carousel .controls li {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        .tab-slider-content-div {
+            margin: 0px !important;
+            margin-top: 40px !important;
+            margin-bottom: 50px !important;
+        }
+        .tab-slider-slides-wrapper {
+            display: block !important;
+        }
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+            font-size: 3.5rem !important;
+            line-height: 3.5rem !important;
+            text-align: center;
+            margin-bottom: 30px !important;
+        }
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
+            text-align: center;
+            width: 90%;
+            margin: 0px auto;
+        }
+        .app-redirection-link-img-wrapper {
+            justify-content: center;
+            margin-bottom: 30px !important;
+        }
+        .app-redirection-link-img {
+            max-width: 100% !important;
+            width: 100%;
+            width: fit-content;
+            height: 50px !important;
+        }
+    }
+    
+    @media screen and (min-width:321px) and (max-width:375px) {
+        img.glyphicon.glyphicon-chevron-right {
+            right: 2%;
+            margin-right: 0px;
+            width: 20px;
+        }
+        img.glyphicon.glyphicon-chevron-lef {
+            left: 2% !important;
+            width: 20px;
+        }
+        .carousel-control {
+            top: 93%;
+        }
+        #custom_carousel .item,
+        .tab-slider-slides-wrapper {
+            height: auto;
+        }
+        .tab-slider-content-div,
+        .tab-slider-img-div {
+            width: 100%;
+        }
+        #custom_carousel .controls li {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        .tab-slider-content-div {
+            margin: 0px !important;
+            margin-top: 30px !important;
+            margin-bottom: 40px !important;
+        }
+        .tab-slider-slides-wrapper {
+            display: block !important;
+        }
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+            font-size: 3rem !important;
+            line-height: 3rem !important;
+            text-align: center;
+            margin-bottom: 10px !important;
+        }
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
+            text-align: center;
+            width: 90%;
+            margin: 0px auto;
+        }
+        .app-redirection-link-img-wrapper {
+            justify-content: center;
+            margin-bottom: 30px !important;
+        }
+        .app-redirection-link-img {
+            max-width: 100% !important;
+            width: 100%;
+            width: fit-content;
+            height: 50px !important;
+        }
+    }
+    
+    @media screen and (max-width:320px) {
+        img.glyphicon.glyphicon-chevron-right {
+            right: 2%;
+            margin-right: 0px;
+            width: 20px;
+        }
+        img.glyphicon.glyphicon-chevron-lef {
+            left: 2% !important;
+            width: 20px;
+        }
+        .carousel-control {
+            top: 93%;
+        }
+        #custom_carousel .item,
+        .tab-slider-slides-wrapper {
+            height: auto;
+        }
+        .tab-slider-content-div,
+        .tab-slider-img-div {
+            width: 100%;
+        }
+        #custom_carousel .controls li {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        .tab-slider-content-div {
+            margin: 0px !important;
+            margin-top: 30px !important;
+            margin-bottom: 30px !important;
+        }
+        .tab-slider-slides-wrapper {
+            display: block !important;
+        }
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+            font-size: 3rem !important;
+            line-height: 3rem !important;
+            text-align: center;
+            margin-bottom: 10px !important;
+        }
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
+            text-align: center;
+            width: 90%;
+            margin: 0px auto;
+        }
+        .app-redirection-link-img-wrapper {
+            justify-content: center;
+            margin-bottom: 30px !important;
+        }
+        .app-redirection-link-img {
+            max-width: 100% !important;
+            width: 100%;
+            width: fit-content;
+            height: 40px !important;
+        }
+    }
+    
+    .text-center {
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: none;
+        line-height: 17px;
+        font-family: "Plus Jakarta Sans", Sans-serif;
+    }
+    /*.tab-slider-slides-main-wrapper*/
+</style>
+<div class="">
+    <div class="row tab-slider-slides-main-wrapper">
+        <div class="featurette" id="about">
+            <!------------------------code---------------start---------------->
+            <div class="">
+                <div id="custom_carousel" class="custom-carousel slide" data-interval="2500" data-ride="carousel">
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <div class="tab-slider-single-slide-wrapper">
+                                <div class=" tab-slider-slides-wrapper">
+                                    <div class="tab-slider-content-div">
+                                        <h2 class="tab-slider-content-div-head">Preserve Your<br> <span style="color: #FB497D;"> Memories  </span>Forever</h2>
+                                        <p class="tab-slider-content-div-para">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris neque risus, cursus facilisis orci gravida, viverra volutpat elit. Cras id enim risus. Duis odio lorem, venenatis sed augue quis.</p>
+                                        <div class="app-redirection-link-img-wrapper"><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155028.webp" alt=""><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155027.webp"
+                                                alt="">
+                                        </div>
+                                    </div>
+                                    <div class="tab-slider-img-div"><img style="width: 100%; height:fit-content;" src="https://dev.colorkahar.com/wp-content/uploads/2024/01/retro-feature-size-01.webp" class=""></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item ">
+                            <div class="tab-slider-single-slide-wrapper">
+                                <div class=" tab-slider-slides-wrapper">
+                                    <div class="tab-slider-content-div">
+                                        <h2 class="tab-slider-content-div-head">Preserve Your<br> <span style="color: #FB497D;"> Memories  </span>Forever</h2>
+                                        <p class="tab-slider-content-div-para">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris neque risus, cursus facilisis orci gravida, viverra volutpat elit. Cras id enim risus. Duis odio lorem, venenatis sed augue quis.</p>
+                                        <div class="app-redirection-link-img-wrapper"><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155028.webp" alt=""><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155027.webp"
+                                                alt="">
+                                        </div>
+                                    </div>
+                                    <div class="tab-slider-img-div"><img style="width: 100%; height:fit-content;" src="https://dev.colorkahar.com/wp-content/uploads/2024/01/retro-feature-size-01.webp" class=""></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item ">
+                            <div class="tab-slider-single-slide-wrapper">
+                                <div class=" tab-slider-slides-wrapper">
+                                    <div class="tab-slider-content-div">
+                                        <h2 class="tab-slider-content-div-head">Preserve Your<br> <span style="color: #FB497D;"> Memories  </span>Forever</h2>
+                                        <p class="tab-slider-content-div-para">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris neque risus, cursus facilisis orci gravida, viverra volutpat elit. Cras id enim risus. Duis odio lorem, venenatis sed augue quis.</p>
+                                        <div class="app-redirection-link-img-wrapper"><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155028.webp" alt=""><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155027.webp"
+                                                alt="">
+                                        </div>
+                                    </div>
+                                    <div class="tab-slider-img-div"><img style="width: 100%; height:fit-content;" src="https://dev.colorkahar.com/wp-content/uploads/2024/01/retro-feature-size-01.webp" class=""></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item ">
+                            <div class="tab-slider-single-slide-wrapper">
+                                <div class=" tab-slider-slides-wrapper">
+                                    <div class="tab-slider-content-div">
+                                        <h2 class="tab-slider-content-div-head">Preserve Your<br> <span style="color: #FB497D;"> Memories  </span>Forever</h2>
+                                        <p class="tab-slider-content-div-para">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris neque risus, cursus facilisis orci gravida, viverra volutpat elit. Cras id enim risus. Duis odio lorem, venenatis sed augue quis.</p>
+                                        <div class="app-redirection-link-img-wrapper"><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155028.webp" alt=""><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155027.webp"
+                                                alt="">
+                                        </div>
+                                    </div>
+                                    <div class="tab-slider-img-div"><img style="width: 100%; height:fit-content;" src="https://dev.colorkahar.com/wp-content/uploads/2024/01/retro-feature-size-01.webp" class=""></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <a class="left carousel-control" role="button" data-slide="prev">
+                        <img class="glyphicon glyphicon-chevron-lef" src="https://dev.colorkahar.com/wp-content/uploads/2025/01/tab-slider-slides-wrapper-left-arrow.png" alt="Previous">
+                    </a>
+                    <a class="right carousel-control" role="button" data-slide="next">
+                        <img class="glyphicon glyphicon-chevron-right" src="https://dev.colorkahar.com/wp-content/uploads/2025/01/tab-slider-slides-wrapper-right-arrow.png" alt="Next">
+
+                    </a>
+
+                    <div class="controls">
+                        <ul class="tabs-nav">
+                            <li data-target="#custom_carousel" data-slide-to="0" class="active">
+                                <span class=" text-center" style="max-width: fit-content;"> Welcome to Color Kahar💍✈️ </span>
+                            </li>
+                            <li data-target="#custom_carousel" data-slide-to="1">
+                                <span class="text-center" style="max-width: fit-content;"> Explore Our Range of Photo Products 📚🎨</span>
+                            </li>
+                            <li data-target="#custom_carousel" data-slide-to="2">
+                                <span class=" text-center" style="max-width: fit-content;">Join Our Tree 🌳🌍</span>
+                            </li>
+                            <li data-target="#custom_carousel" data-slide-to="3">
+                                <span class=" text-center" style="max-width: fit-content;">Grab Our Latest Deals 💰🎉</span>
+                                <!-- <li data-target="#custom_carousel" data-slide-to="4">
+                                        <a href="#"><img src="http://placemi.com/bbqez/230x220"><small>wexi</small></a>
+                                    </li> -->
+                        </ul>
+                    </div>
+                </div>
+                <!-- End Carousel -->
+            </div>
+            <!----Code------end----------------------------------->
+        </div>
+    </div>
+</div>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Initialize the carousel with auto-slide interval
+        $('#custom_carousel').carousel({
+            interval: 2500
+        });
+
+        // Sync tabs with slide changes
+        $('#custom_carousel').on('slide.bs.carousel', function(evt) {
+            const nextIndex = $(evt.relatedTarget).index(); // Get the index of the next slide
+
+            // Remove active class from all tabs
+            $('.tabs-nav li').removeClass('active');
+            // Add active class to the corresponding tab
+            $('.tabs-nav li:eq(' + nextIndex + ')').addClass('active');
+        });
+
+        // Handle tab clicks
+        $('.tabs-nav li').click(function() {
+            const slideToIndex = $(this).index(); // Get the index of the clicked tab
+            $('#custom_carousel').carousel(slideToIndex); // Move to the corresponding slide
+
+            // Update tabs' active state
+            $('.tabs-nav li').removeClass('active');
+            $(this).addClass('active');
+        });
+
+        // Arrow controls: Next and Previous
+        $('.left.carousel-control').click(function() {
+            $('#custom_carousel').carousel('prev'); // Move to the previous slide
+        });
+
+        $('.right.carousel-control').click(function() {
+            $('#custom_carousel').carousel('next'); // Move to the next slide
+        });
+    });
+</script>
