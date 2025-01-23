@@ -1,8 +1,28 @@
-   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-        <style>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <style>
         body {
             margin: 0px;
             padding: 0px;
+        }
+        
+        .tabs-nav {
+            overflow-x: auto;
+            /* Allow horizontal scrolling */
+            white-space: nowrap;
+            /* Prevent tabs from wrapping */
+        }
+        
+        .tabs-nav li {
+            display: inline-block;
+            /* Ensure tabs are inline for horizontal scrolling */
         }
         
         .tabs-nav li.active span {
@@ -342,7 +362,7 @@
         .carousel-control {
             height: 1px;
             position: absolute;
-            top: 91%;
+            top: 92%;
             bottom: 0;
             left: 0;
             width: 100%;
@@ -389,11 +409,11 @@
         
         @media screen and (min-width: 2560px) {
             .carousel-control {
-                top: 91%;
+                top: 93%;
             }
         }
         
-        @media screen and (min-width:1024px) and (max-width:1249px) {
+        @media screen and (min-width:1025px) and (max-width:1249px) {
             img.glyphicon.glyphicon-chevron-lef {
                 left: 1% !important;
                 width: 15px;
@@ -404,7 +424,7 @@
                 width: 15px;
             }
             .carousel-control {
-                top: 92.5%;
+                top: 93.5%;
             }
         }
         
@@ -425,17 +445,20 @@
                 right: 2%;
             }
             .carousel-control {
-                top: 91%;
+                top: 93%;
             }
         }
         
         @media screen and (min-width: 769px) and (max-width: 1024px) {
             .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
-                font-size: 3.5rem !important;
+                font-size: 2.5rem !important;
                 font-weight: 800;
-                line-height: 4rem !important;
-                margin-bottom: 20px;
+                line-height: 3rem !important;
+                margin-bottom: 10px;
                 padding: 0px;
+            }
+            .app-redirection-link-img-wrapper {
+                margin: 2px 0px 2px 0px;
             }
             #custom_carousel .controls li {
                 max-width: 100%;
@@ -444,27 +467,94 @@
             }
             img.glyphicon.glyphicon-chevron-lef,
             img.glyphicon.glyphicon-chevron-right {
-                width: 15px;
-                height: 15px;
+                width: 20px;
             }
             .carousel-control {
-                top: 93%;
+                top: 91.5%;
+            }
+            img.glyphicon.glyphicon-chevron-right {
+                right: 1.5%;
+            }
+            img.glyphicon.glyphicon-chevron-lef {
+                left: 0.3% !important;
+            }
+        }
+        
+        @media screen and (min-width:500px) and (max-width:768px) {
+            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+                font-size: 3.5rem !important;
+                line-height: 4.5rem !important;
+                text-align: center;
+                margin-bottom: 30px !important;
+            }
+            .carousel-control {
+                top: 50%;
+            }
+            img.glyphicon.glyphicon-chevron-right {
+                width: 25px;
+                right: 3% !important;
+            }
+            img.glyphicon.glyphicon-chevron-lef {
+                width: 25px;
+                left: 2% !important;
+            }
+        }
+        
+        @media screen and (min-width:426px) and (max-width:499px) {
+            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+                font-size: 2.5rem !important;
+                line-height: 3rem !important;
+                text-align: center;
+                margin-bottom: 30px !important;
+            }
+            ul.tabs-nav {
+                padding: 0px !important;
+                width: 100%;
+                margin: 0px auto;
+            }
+            .tabs-nav li.active span {
+                padding-bottom: 10px;
+                display: block;
+                align-items: center !important;
+                text-align: center !important;
+                justify-content: center !important;
+                width: 100% !important;
+                margin: 0px auto;
+            }
+            .tabs-nav li span {
+                display: none;
+            }
+            #custom_carousel .controls li {
+                width: 100%;
+                max-width: 100%;
+                padding-left: 0px;
+                padding-right: 0px;
+                display: none;
+            }
+            #custom_carousel .controls li.active {
+                background-color: #faccbd;
+                color: #FB497D !important;
+                display: block;
+                width: 70%;
+                margin: 0px auto;
+                text-align: center !important;
+            }
+            .carousel-control {
+                top: 91.4%;
+            }
+            img.glyphicon.glyphicon-chevron-right {
+                width: 25px;
+                right: 3% !important;
+            }
+            img.glyphicon.glyphicon-chevron-lef {
+                width: 25px;
+                left: 1% !important;
             }
         }
         
         @media screen and (min-width:426px) and (max-width:768px) {
-            .carousel-control {
-                top: 94.8%;
-            }
-            img.glyphicon.glyphicon-chevron-right {
-                width: 18px;
-                height: 18px;
-                right: 2% !important;
-            }
-            img.glyphicon.glyphicon-chevron-lef {
-                width: 18px;
-                height: 18px;
-                left: 1% !important;
+            .tabs-nav li.active span {
+                padding-bottom: 10px;
             }
             #custom_carousel .item,
             .tab-slider-slides-wrapper {
@@ -487,12 +577,6 @@
             }
             .tab-slider-slides-wrapper {
                 display: block !important;
-            }
-            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
-                font-size: 3.5rem !important;
-                line-height: 4.5rem !important;
-                text-align: center;
-                margin-bottom: 30px !important;
             }
             .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
                 text-align: center;
@@ -511,6 +595,38 @@
         }
         
         @media screen and (min-width:376px) and (max-width:425px) {
+            ul.tabs-nav {
+                padding: 0px !important;
+                width: 100%;
+                margin: 0px auto;
+            }
+            .tabs-nav li.active span {
+                padding-bottom: 10px;
+                display: block;
+                align-items: center !important;
+                text-align: center !important;
+                justify-content: center !important;
+                width: 100% !important;
+                margin: 0px auto;
+            }
+            .tabs-nav li span {
+                display: none;
+            }
+            #custom_carousel .controls li {
+                width: 100%;
+                max-width: 100%;
+                padding-left: 0px;
+                padding-right: 0px;
+                display: none;
+            }
+            #custom_carousel .controls li.active {
+                background-color: #faccbd;
+                color: #FB497D !important;
+                display: block;
+                width: 70%;
+                margin: 0px auto;
+                text-align: center !important;
+            }
             img.glyphicon.glyphicon-chevron-right {
                 right: 2%;
                 margin-right: 0px;
@@ -521,7 +637,7 @@
                 width: 20px;
             }
             .carousel-control {
-                top: 93.5%;
+                top: 91%;
             }
             #custom_carousel .item,
             .tab-slider-slides-wrapper {
@@ -530,12 +646,6 @@
             .tab-slider-content-div,
             .tab-slider-img-div {
                 width: 100%;
-            }
-            #custom_carousel .controls li {
-                width: 100%;
-                max-width: 100%;
-                padding-left: 30px;
-                padding-right: 30px;
             }
             .tab-slider-content-div {
                 margin: 0px !important;
@@ -546,8 +656,8 @@
                 display: block !important;
             }
             .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
-                font-size: 3.5rem !important;
-                line-height: 3.5rem !important;
+                font-size: 2.5rem !important;
+                line-height: 3rem !important;
                 text-align: center;
                 margin-bottom: 30px !important;
             }
@@ -572,17 +682,34 @@
         }
         
         @media screen and (min-width:321px) and (max-width:375px) {
+            ul.tabs-nav {
+                padding: 0px !important;
+                width: 100%;
+                margin: 0px auto;
+            }
+            .tabs-nav li.active span {
+                padding-bottom: 10px;
+                display: block;
+                align-items: center !important;
+                text-align: center !important;
+                justify-content: center !important;
+                width: 100% !important;
+                margin: 0px auto;
+            }
+            .tabs-nav li span {
+                display: none;
+            }
             img.glyphicon.glyphicon-chevron-right {
-                right: 2%;
+                right: 2.5%;
                 margin-right: 0px;
-                width: 20px;
+                width: 25px;
             }
             img.glyphicon.glyphicon-chevron-lef {
                 left: 2% !important;
-                width: 20px;
+                width: 25px;
             }
             .carousel-control {
-                top: 92.5%;
+                top: 90.5%;
             }
             #custom_carousel .item,
             .tab-slider-slides-wrapper {
@@ -595,8 +722,17 @@
             #custom_carousel .controls li {
                 width: 100%;
                 max-width: 100%;
-                padding-left: 30px;
-                padding-right: 30px;
+                padding-left: 0px;
+                padding-right: 0px;
+                display: none;
+            }
+            #custom_carousel .controls li.active {
+                background-color: #faccbd;
+                color: #FB497D !important;
+                display: block;
+                width: 70%;
+                margin: 0px auto;
+                text-align: center !important;
             }
             .tab-slider-content-div {
                 margin: 0px !important;
@@ -607,8 +743,8 @@
                 display: block !important;
             }
             .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
-                font-size: 3rem !important;
-                line-height: 3rem !important;
+                font-size: 2.2rem !important;
+                line-height: 2.5rem !important;
                 text-align: center;
                 margin-bottom: 10px !important;
             }
@@ -633,17 +769,34 @@
         }
         
         @media screen and (max-width:320px) {
+            .tabs-nav li span {
+                display: none;
+            }
+            ul.tabs-nav {
+                padding: 0px !important;
+                width: 100%;
+                margin: 0px auto;
+            }
+            .tabs-nav li.active span {
+                padding-bottom: 10px;
+                display: block;
+                align-items: center !important;
+                text-align: center !important;
+                justify-content: center !important;
+                width: 100% !important;
+                margin: 0px auto;
+            }
             img.glyphicon.glyphicon-chevron-right {
-                right: 2%;
+                right: 2.5%;
                 margin-right: 0px;
-                width: 20px;
+                width: 25px;
             }
             img.glyphicon.glyphicon-chevron-lef {
                 left: 2% !important;
-                width: 20px;
+                width: 25px;
             }
             .carousel-control {
-                top: 91.5%;
+                top: 90%;
             }
             #custom_carousel .item,
             .tab-slider-slides-wrapper {
@@ -656,8 +809,17 @@
             #custom_carousel .controls li {
                 width: 100%;
                 max-width: 100%;
-                padding-left: 30px;
-                padding-right: 30px;
+                padding-left: 0px;
+                padding-right: 0px;
+                display: none;
+            }
+            #custom_carousel .controls li.active {
+                background-color: #faccbd;
+                color: #FB497D !important;
+                display: block;
+                width: 70%;
+                margin: 0px auto;
+                text-align: center !important;
             }
             .tab-slider-content-div {
                 margin: 0px !important;
@@ -668,8 +830,8 @@
                 display: block !important;
             }
             .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
-                font-size: 3rem !important;
-                line-height: 3rem !important;
+                font-size: 2rem !important;
+                line-height: 2.5rem !important;
                 text-align: center;
                 margin-bottom: 10px !important;
             }
@@ -701,9 +863,28 @@
             line-height: 17px;
             font-family: "Plus Jakarta Sans", Sans-serif;
         }
-        /*.tab-slider-slides-main-wrapper*/
+        /*banner text resizing on different screens*/
+        
+        @media screen and (min-width: 1093px) and (max-width: 1261px) {
+            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+                font-size: 3rem;
+                line-height: 3.5rem;
+                margin-bottom: 20px;
+            }
+        }
+        
+        @media screen and (min-width:1025px) and (max-width:1092px) {
+            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+                font-size: 2.5rem;
+                line-height: 3rem;
+                margin-bottom: 10px;
+            }
+        }
     </style>
-  <div class="">
+</head>
+
+<body>
+    <div class="">
         <div class="row tab-slider-slides-main-wrapper">
             <div class="featurette" id="about">
                 <!------------------------code---------------start---------------->
@@ -715,7 +896,7 @@
                                 <div class="tab-slider-single-slide-wrapper">
                                     <div class=" tab-slider-slides-wrapper">
                                         <div class="tab-slider-content-div">
-                                            <h2 class="tab-slider-content-div-head">Welcome to Color Kahar <br>Your <span style="color: #FB497D;"> Premium Online  </span>Photo Printing App</h2>
+                                            <h2 class="tab-slider-content-div-head">Welcome to Color Kahar <br> Your <span style="color: #FB497D;">  Premium Online  </span>Photo Printing App</h2>
                                             <p class="tab-slider-content-div-para">Create Amazing Photo Albums, Prints, and More, All from Your Phone! 📸✨</p>
                                             <div class="app-redirection-link-img-wrapper"><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155028.webp" alt=""><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155027.webp"
                                                     alt="">
@@ -784,7 +965,7 @@
                                     <span class=" text-center" style="max-width: fit-content;"> Welcome to Color Kahar💍✈️ </span>
                                 </li>
                                 <li data-target="#custom_carousel" data-slide-to="1">
-                                    <span class="text-center" style="max-width: fit-content;"> Explore Our Range of Photo Products 📚🎨</span>
+                                    <span class="text-center" style="max-width: fit-content;"> Explore Photo Products 📚🎨</span>
                                 </li>
                                 <li data-target="#custom_carousel" data-slide-to="2">
                                     <span class=" text-center" style="max-width: fit-content;">Join Our Tree 🌳🌍</span>
@@ -803,14 +984,28 @@
             </div>
         </div>
     </div>
-   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
     <script>
         $(document).ready(function() {
             // Initialize the carousel with auto-slide interval
             $('#custom_carousel').carousel({
-                interval: 25000
+                interval: 250000
             });
+
+            // Function to scroll the active tab into view horizontally without affecting vertical scroll
+            function scrollToActiveTab() {
+                const activeTab = document.querySelector('.tabs-nav li.active'); // Get the active tab element
+                const tabsNav = document.querySelector('.tabs-nav'); // Get the parent container of the tabs
+
+                if (activeTab && tabsNav) {
+                    const scrollLeft = activeTab.offsetLeft - (tabsNav.clientWidth / 2) + (activeTab.clientWidth / 2);
+                    tabsNav.scrollTo({
+                        left: scrollLeft,
+                        behavior: 'smooth' // Smooth scrolling for better UX
+                    });
+                }
+            }
 
             // Sync tabs with slide changes
             $('#custom_carousel').on('slide.bs.carousel', function(evt) {
@@ -820,6 +1015,9 @@
                 $('.tabs-nav li').removeClass('active');
                 // Add active class to the corresponding tab
                 $('.tabs-nav li:eq(' + nextIndex + ')').addClass('active');
+
+                // Scroll to the active tab
+                scrollToActiveTab();
             });
 
             // Handle tab clicks
@@ -830,6 +1028,9 @@
                 // Update tabs' active state
                 $('.tabs-nav li').removeClass('active');
                 $(this).addClass('active');
+
+                // Scroll to the active tab
+                scrollToActiveTab();
             });
 
             // Arrow controls: Next and Previous
@@ -840,50 +1041,50 @@
             $('.right.carousel-control').click(function() {
                 $('#custom_carousel').carousel('next'); // Move to the next slide
             });
-        });
-        
-        
-       // to contol height of tabs on tablet and mobile devices 
-        
-document.addEventListener("DOMContentLoaded", function () {
-    function adjustSliderHeight() {
-        const carousel = document.querySelector("#custom_carousel .carousel-inner");
-        const slides = document.querySelectorAll("#custom_carousel .item");
-        const viewportWidth = window.innerWidth;
 
-        if (viewportWidth >= 320 && viewportWidth <= 786) {
-            let maxHeight = 0;
+            // To control height of tabs on tablet and mobile devices
+            function adjustSliderHeight() {
+                const carousel = document.querySelector("#custom_carousel .carousel-inner");
+                const slides = document.querySelectorAll("#custom_carousel .item");
+                const viewportWidth = window.innerWidth;
 
-            // Calculate the max height of the slides
-            slides.forEach((slide) => {
-                slide.style.height = "auto"; // Reset to natural height
-                const height = slide.offsetHeight;
-                if (height > maxHeight) {
-                    maxHeight = height;
+                if (viewportWidth >= 320 && viewportWidth <= 786) {
+                    let maxHeight = 0;
+
+                    // Calculate the max height of the slides
+                    slides.forEach((slide) => {
+                        slide.style.height = "auto"; // Reset to natural height
+                        const height = slide.offsetHeight;
+                        if (height > maxHeight) {
+                            maxHeight = height;
+                        }
+                    });
+
+                    // Apply the max height to all slides
+                    slides.forEach((slide) => {
+                        slide.style.height = `${maxHeight}px`;
+                    });
+
+                    // Ensure the carousel itself adjusts to the height
+                    carousel.style.height = `${maxHeight}px`;
+                } else {
+                    // Reset height for larger or smaller screens
+                    slides.forEach((slide) => {
+                        slide.style.height = "auto";
+                    });
+                    carousel.style.height = "auto";
                 }
-            });
+            }
 
-            // Apply the max height to all slides
-            slides.forEach((slide) => {
-                slide.style.height = `${maxHeight}px`;
-            });
+            // Adjust on page load
+            adjustSliderHeight();
 
-            // Ensure the carousel itself adjusts to the height
-            carousel.style.height = `${maxHeight}px`;
-        } else {
-            // Reset height for larger or smaller screens
-            slides.forEach((slide) => {
-                slide.style.height = "auto";
-            });
-            carousel.style.height = "auto";
-        }
-    }
-
-    // Adjust on page load
-    adjustSliderHeight();
-
-    // Adjust on window resize
-    window.addEventListener("resize", adjustSliderHeight);
-});
-
+            // Adjust on window resize
+            window.addEventListener("resize", adjustSliderHeight);
+        });
     </script>
+
+
+</body>
+
+</html>
