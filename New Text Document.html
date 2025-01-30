@@ -261,7 +261,7 @@
         #custom_carousel .item {
             color: #000;
             /*background-image: linear-gradient(90deg, rgba(253, 105, 132, 0.08) 0%, rgba(247, 158, 129, 0.08) 100%);
-            */
+                */
             padding: 0px;
             background: #fff5f4;
             height: 65vh;
@@ -295,12 +295,13 @@
         ul.tabs-nav {
             margin: 0px;
             padding: 0px;
+            cursor: pointer;
         }
         
         #custom_carousel .controls li.active {
             background-color: #faccbd;
             /*border-bottom: 2px solid #FB497D;
-            */
+                */
             color: #FB497D !important;
         }
         
@@ -407,24 +408,31 @@
             margin: 20px 0px 20px 0px;
         }
         
-        @media screen and (min-width: 2560px) {
+        @media screen and (max-width: 2560px) and (min-width:2556px) {
             .carousel-control {
                 top: 93%;
+            }
+        }
+        
+        @media screen and (min-width: 2555px) and (max-width: 2555px) {
+            .carousel-control {
+                top: 94.5%;
             }
         }
         
         @media screen and (min-width:1025px) and (max-width:1249px) {
             img.glyphicon.glyphicon-chevron-lef {
                 left: 1% !important;
-                width: 15px;
+                /* width: 15px;*/
             }
             img.glyphicon.glyphicon-chevron-right {
                 right: 1%;
                 margin-right: 0px !important;
-                width: 15px;
+                /*  width: 15px;
+                */
             }
             .carousel-control {
-                top: 93.5%;
+                top: 90%;
             }
         }
         
@@ -434,6 +442,9 @@
             }
             img.glyphicon.glyphicon-chevron-right {
                 right: 2%;
+            }
+            .carousel-control {
+                top: 90.5%;
             }
         }
         
@@ -445,7 +456,7 @@
                 right: 2%;
             }
             .carousel-control {
-                top: 93%;
+                top: 90.5%;
             }
         }
         
@@ -470,7 +481,7 @@
                 width: 20px;
             }
             .carousel-control {
-                top: 91.5%;
+                top: 90.5%;
             }
             img.glyphicon.glyphicon-chevron-right {
                 right: 1.5%;
@@ -628,16 +639,16 @@
                 text-align: center !important;
             }
             img.glyphicon.glyphicon-chevron-right {
-                right: 2%;
+                right: 2.5%;
                 margin-right: 0px;
-                width: 20px;
+                width: 25px;
             }
             img.glyphicon.glyphicon-chevron-lef {
                 left: 2% !important;
-                width: 20px;
+                width: 25px;
             }
             .carousel-control {
-                top: 91%;
+                top: 91.4%;
             }
             #custom_carousel .item,
             .tab-slider-slides-wrapper {
@@ -948,17 +959,17 @@
                                     </div>
                                 </div>
                             </div>
-
+    
                         </div>
-
+    
                         <a class="left carousel-control" role="button" data-slide="prev">
                             <img class="glyphicon glyphicon-chevron-lef" src="https://dev.colorkahar.com/wp-content/uploads/2025/01/tab-slider-left-arrow.png.png" alt="Previous">
                         </a>
                         <a class="right carousel-control" role="button" data-slide="next">
                             <img class="glyphicon glyphicon-chevron-right" src="https://dev.colorkahar.com/wp-content/uploads/2025/01/tab-slider-right-arrow.png" alt="Next">
-
+    
                         </a>
-
+    
                         <div class="controls">
                             <ul class="tabs-nav">
                                 <li data-target="#custom_carousel" data-slide-to="0" class="active">
@@ -973,8 +984,8 @@
                                 <li data-target="#custom_carousel" data-slide-to="3">
                                     <span class=" text-center" style="max-width: fit-content;">Grab Our Latest Deals 💰🎉</span>
                                     <!-- <li data-target="#custom_carousel" data-slide-to="4">
-                                        <a href="#"><img src="http://placemi.com/bbqez/230x220"><small>wexi</small></a>
-                                    </li> -->
+                                            <a href="#"><img src="http://placemi.com/bbqez/230x220"><small>wexi</small></a>
+                                        </li> -->
                             </ul>
                         </div>
                     </div>
@@ -990,14 +1001,14 @@
         $(document).ready(function() {
             // Initialize the carousel with auto-slide interval
             $('#custom_carousel').carousel({
-                interval: 250000
+                interval: 2500
             });
-
+    
             // Function to scroll the active tab into view horizontally without affecting vertical scroll
             function scrollToActiveTab() {
                 const activeTab = document.querySelector('.tabs-nav li.active'); // Get the active tab element
                 const tabsNav = document.querySelector('.tabs-nav'); // Get the parent container of the tabs
-
+    
                 if (activeTab && tabsNav) {
                     const scrollLeft = activeTab.offsetLeft - (tabsNav.clientWidth / 2) + (activeTab.clientWidth / 2);
                     tabsNav.scrollTo({
@@ -1006,51 +1017,51 @@
                     });
                 }
             }
-
+    
             // Sync tabs with slide changes
             $('#custom_carousel').on('slide.bs.carousel', function(evt) {
                 const nextIndex = $(evt.relatedTarget).index(); // Get the index of the next slide
-
+    
                 // Remove active class from all tabs
                 $('.tabs-nav li').removeClass('active');
                 // Add active class to the corresponding tab
                 $('.tabs-nav li:eq(' + nextIndex + ')').addClass('active');
-
+    
                 // Scroll to the active tab
                 scrollToActiveTab();
             });
-
+    
             // Handle tab clicks
             $('.tabs-nav li').click(function() {
                 const slideToIndex = $(this).index(); // Get the index of the clicked tab
                 $('#custom_carousel').carousel(slideToIndex); // Move to the corresponding slide
-
+    
                 // Update tabs' active state
                 $('.tabs-nav li').removeClass('active');
                 $(this).addClass('active');
-
+    
                 // Scroll to the active tab
                 scrollToActiveTab();
             });
-
+    
             // Arrow controls: Next and Previous
             $('.left.carousel-control').click(function() {
                 $('#custom_carousel').carousel('prev'); // Move to the previous slide
             });
-
+    
             $('.right.carousel-control').click(function() {
                 $('#custom_carousel').carousel('next'); // Move to the next slide
             });
-
+    
             // To control height of tabs on tablet and mobile devices
             function adjustSliderHeight() {
                 const carousel = document.querySelector("#custom_carousel .carousel-inner");
                 const slides = document.querySelectorAll("#custom_carousel .item");
                 const viewportWidth = window.innerWidth;
-
+    
                 if (viewportWidth >= 320 && viewportWidth <= 786) {
                     let maxHeight = 0;
-
+    
                     // Calculate the max height of the slides
                     slides.forEach((slide) => {
                         slide.style.height = "auto"; // Reset to natural height
@@ -1059,12 +1070,12 @@
                             maxHeight = height;
                         }
                     });
-
+    
                     // Apply the max height to all slides
                     slides.forEach((slide) => {
                         slide.style.height = `${maxHeight}px`;
                     });
-
+    
                     // Ensure the carousel itself adjusts to the height
                     carousel.style.height = `${maxHeight}px`;
                 } else {
@@ -1075,15 +1086,14 @@
                     carousel.style.height = "auto";
                 }
             }
-
+    
             // Adjust on page load
             adjustSliderHeight();
-
+    
             // Adjust on window resize
             window.addEventListener("resize", adjustSliderHeight);
         });
     </script>
-
 
 </body>
 
