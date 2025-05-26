@@ -1,1100 +1,1155 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <style>
-        body {
-            margin: 0px;
-            padding: 0px;
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Initialize the carousel with auto-slide interval
+        // turn off slider for movile only 
+       // function setCarouselInterval() {
+         //   const isMobile = window.innerWidth <= 786; 
+           // $('#custom_carousel').carousel({
+             //   interval: isMobile ? false : 2500 
+            //});
+        //}
+        // turn of slider on all screens 
+        function setCarouselInterval() {
+            $('#custom_carousel').carousel({
+                interval: false // Disable auto-slide on all screen sizes
+            });
         }
         
-        .tabs-nav {
-            overflow-x: auto;
-            /* Allow horizontal scrolling */
-            white-space: nowrap;
-            /* Prevent tabs from wrapping */
+        // Initialize the carousel with the correct settings
+        setCarouselInterval();
+
+        // Adjust on window resize
+        $(window).resize(function() {
+            setCarouselInterval();
+        });
+        // Function to scroll the active tab into view horizontally without affecting vertical scroll
+        function scrollToActiveTab() {
+            const activeTab = document.querySelector('.tabs-nav li.active'); // Get the active tab element
+            const tabsNav = document.querySelector('.tabs-nav'); // Get the parent container of the tabs
+
+            if (activeTab && tabsNav) {
+                const scrollLeft = activeTab.offsetLeft - (tabsNav.clientWidth / 2) + (activeTab.clientWidth / 2);
+                tabsNav.scrollTo({
+                    left: scrollLeft,
+                    behavior: 'smooth' // Smooth scrolling for better UX
+                });
+            }
         }
-        
-        .tabs-nav li {
-            display: inline-block;
-            /* Ensure tabs are inline for horizontal scrolling */
+
+        // Sync tabs with slide changes
+        $('#custom_carousel').on('slide.bs.carousel', function(evt) {
+            const nextIndex = $(evt.relatedTarget).index(); // Get the index of the next slide
+
+            // Remove active class from all tabs
+            $('.tabs-nav li').removeClass('active');
+            // Add active class to the corresponding tab
+            $('.tabs-nav li:eq(' + nextIndex + ')').addClass('active');
+
+            // Scroll to the active tab
+            scrollToActiveTab();
+        });
+
+        // Handle tab clicks
+        $('.tabs-nav li').click(function() {
+            const slideToIndex = $(this).index(); // Get the index of the clicked tab
+            $('#custom_carousel').carousel(slideToIndex); // Move to the corresponding slide
+
+            // Update tabs' active state
+            $('.tabs-nav li').removeClass('active');
+            $(this).addClass('active');
+
+            // Scroll to the active tab
+            scrollToActiveTab();
+        });
+
+        // Arrow controls: Next and Previous
+        $('.left.carousel-control').click(function() {
+            $('#custom_carousel').carousel('prev'); // Move to the previous slide
+        });
+
+        $('.right.carousel-control').click(function() {
+            $('#custom_carousel').carousel('next'); // Move to the next slide
+        });
+
+        // To control height of tabs on tablet and mobile devices
+        function adjustSliderHeight() {
+            const carousel = document.querySelector("#custom_carousel .carousel-inner");
+            const slides = document.querySelectorAll("#custom_carousel .item");
+            const viewportWidth = window.innerWidth;
+
+            if (viewportWidth >= 320 && viewportWidth <= 786) {
+                let maxHeight = 0;
+
+                // Calculate the max height of the slides
+                slides.forEach((slide) => {
+                    slide.style.height = "auto"; // Reset to natural height
+                    const height = slide.offsetHeight;
+                    if (height > maxHeight) {
+                        maxHeight = height;
+                    }
+                });
+
+                // Apply the max height to all slides
+                slides.forEach((slide) => {
+                    slide.style.height = `${maxHeight}px`;
+                });
+
+                // Ensure the carousel itself adjusts to the height
+                carousel.style.height = `${maxHeight}px`;
+            } else {
+                // Reset height for larger or smaller screens
+                slides.forEach((slide) => {
+                    slide.style.height = "auto";
+                });
+                carousel.style.height = "auto";
+            }
         }
-        
-        .tabs-nav li.active span {
-            border-bottom: 2px solid #FB497D;
-            padding-bottom: 29px;
-        }
-        
-        .glyphicon-chevron-left:before {
-            content: "\e079"
-        }
-        
-        .glyphicon-chevron-right:before {
-            content: "\e080"
-        }
-        
+
+        // Adjust on page load
+        adjustSliderHeight();
+
+        // Adjust on window resize
+        window.addEventListener("resize", adjustSliderHeight);
+    });
+</script>
+<style>
+    body {
+        margin: 0px;
+        padding: 0px;
+    }
+    
+    .tabs-nav {
+        overflow-x: auto;
+        /* Allow horizontal scrolling */
+        white-space: nowrap;
+        /* Prevent tabs from wrapping */
+    }
+    
+    .tabs-nav li {
+        display: inline-block;
+        /* Ensure tabs are inline for horizontal scrolling */
+    }
+    
+    .tabs-nav li.active span {
+        border-bottom: 2px solid #FB497D;
+        padding-bottom: 29px;
+    }
+    
+    .glyphicon-chevron-left:before {
+        content: "\e079"
+    }
+    
+    .glyphicon-chevron-right:before {
+        content: "\e080"
+    }
+    
+    .container {
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto
+    }
+    
+    @media (min-width:768px) {
         .container {
-            padding-right: 15px;
-            padding-left: 15px;
-            margin-right: auto;
-            margin-left: auto
+            width: 750px
         }
-        
-        @media (min-width:768px) {
-            .container {
-                width: 750px
-            }
+    }
+    
+    @media (min-width:992px) {
+        .container {
+            width: 970px
         }
-        
-        @media (min-width:992px) {
-            .container {
-                width: 970px
-            }
+    }
+    
+    @media (min-width:1200px) {
+        .container {
+            width: 1170px
         }
-        
-        @media (min-width:1200px) {
-            .container {
-                width: 1170px
-            }
-        }
-        
-        .container-fluid {
-            padding-right: 15px;
-            padding-left: 15px;
-            margin-right: auto;
-            margin-left: auto
-        }
-        
-        .carousel {
-            position: relative
-        }
-        
-        .carousel-inner {
-            position: relative;
-            width: 100%;
-            overflow: hidden
-        }
-        
+    }
+    
+    .container-fluid {
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto
+    }
+    
+    .carousel {
+        position: relative
+    }
+    
+    .carousel-inner {
+        position: relative;
+        width: 100%;
+        overflow: hidden
+    }
+    
+    .carousel-inner>.item {
+        position: relative;
+        display: none;
+        -webkit-transition: .6s ease-in-out left;
+        -o-transition: .6s ease-in-out left;
+        transition: .6s ease-in-out left
+    }
+    
+    .carousel-inner>.item>img,
+    .carousel-inner>.item>a>img {
+        line-height: 1
+    }
+    
+    @media all and (transform-3d),
+    (-webkit-transform-3d) {
         .carousel-inner>.item {
-            position: relative;
-            display: none;
-            -webkit-transition: .6s ease-in-out left;
-            -o-transition: .6s ease-in-out left;
-            transition: .6s ease-in-out left
+            -webkit-transition: -webkit-transform .6s ease-in-out;
+            -o-transition: -o-transform .6s ease-in-out;
+            transition: transform .6s ease-in-out;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-perspective: 1000;
+            perspective: 1000
         }
-        
-        .carousel-inner>.item>img,
-        .carousel-inner>.item>a>img {
-            line-height: 1
+        .carousel-inner>.item.next,
+        .carousel-inner>.item.active.right {
+            left: 0;
+            -webkit-transform: translate3d(100%, 0, 0);
+            transform: translate3d(100%, 0, 0)
         }
-        
-        @media all and (transform-3d),
-        (-webkit-transform-3d) {
-            .carousel-inner>.item {
-                -webkit-transition: -webkit-transform .6s ease-in-out;
-                -o-transition: -o-transform .6s ease-in-out;
-                transition: transform .6s ease-in-out;
-                -webkit-backface-visibility: hidden;
-                backface-visibility: hidden;
-                -webkit-perspective: 1000;
-                perspective: 1000
-            }
-            .carousel-inner>.item.next,
-            .carousel-inner>.item.active.right {
-                left: 0;
-                -webkit-transform: translate3d(100%, 0, 0);
-                transform: translate3d(100%, 0, 0)
-            }
-            .carousel-inner>.item.prev,
-            .carousel-inner>.item.active.left {
-                left: 0;
-                -webkit-transform: translate3d(-100%, 0, 0);
-                transform: translate3d(-100%, 0, 0)
-            }
-            .carousel-inner>.item.next.left,
-            .carousel-inner>.item.prev.right,
-            .carousel-inner>.item.active {
-                left: 0;
-                -webkit-transform: translate3d(0, 0, 0);
-                transform: translate3d(0, 0, 0)
-            }
+        .carousel-inner>.item.prev,
+        .carousel-inner>.item.active.left {
+            left: 0;
+            -webkit-transform: translate3d(-100%, 0, 0);
+            transform: translate3d(-100%, 0, 0)
         }
-        
-        .carousel-inner>.active,
-        .carousel-inner>.next,
-        .carousel-inner>.prev {
-            display: block
+        .carousel-inner>.item.next.left,
+        .carousel-inner>.item.prev.right,
+        .carousel-inner>.item.active {
+            left: 0;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0)
         }
-        
-        .carousel-inner>.active {
-            left: 0
-        }
-        
-        .carousel-inner>.next,
-        .carousel-inner>.prev {
+    }
+    
+    .carousel-inner>.active,
+    .carousel-inner>.next,
+    .carousel-inner>.prev {
+        display: block
+    }
+    
+    .carousel-inner>.active {
+        left: 0
+    }
+    
+    .carousel-inner>.next,
+    .carousel-inner>.prev {
+        position: absolute;
+        top: 0;
+        width: 100%
+    }
+    
+    .carousel-inner>.next {
+        left: 100%
+    }
+    
+    .carousel-inner>.prev {
+        left: -100%
+    }
+    
+    .carousel-inner>.next.left,
+    .carousel-inner>.prev.right {
+        left: 0
+    }
+    
+    .carousel-inner>.active.left {
+        left: -100%
+    }
+    
+    .carousel-inner>.active.right {
+        left: 100%
+    }
+    
+    .carousel-control:hover,
+    .carousel-control:focus {
+        color: #fff;
+        text-decoration: none;
+        filter: alpha(opacity=90);
+        outline: 0;
+        opacity: .9
+    }
+    
+    .carousel-control .icon-prev,
+    .carousel-control .icon-next,
+    .carousel-control .glyphicon-chevron-left,
+    .carousel-control .glyphicon-chevron-right {
+        z-index: 5;
+        display: inline-block
+    }
+    
+    .carousel-control .icon-prev,
+    .carousel-control .glyphicon-chevron-left {
+        margin-left: -10px
+    }
+    
+    .carousel-control .icon-next,
+    .carousel-control .glyphicon-chevron-right {}
+    
+    .carousel-control .icon-prev,
+    .carousel-control .icon-next {
+        width: 20px;
+        height: 20px;
+        margin-top: -10px;
+    }
+    
+    .carousel-control .icon-prev:before {
+        content: '\2039'
+    }
+    
+    .carousel-control .icon-next:before {
+        content: '\203a'
+    }
+    
+    .carousel-indicators {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        z-index: 15;
+        width: 60%;
+        padding-left: 0;
+        margin-left: -30%;
+        text-align: center;
+        list-style: none
+    }
+    
+    .carousel-indicators li {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin: 1px;
+        text-indent: -999px;
+        cursor: pointer;
+        background-color: #000 \9;
+        background-color: rgba(0, 0, 0, 0);
+        border: 1px solid #fff;
+        border-radius: 10px
+    }
+    
+    .carousel-indicators .active {
+        width: 12px;
+        height: 12px;
+        margin: 0;
+        background-color: #fff
+    }
+    
+    .carousel-caption {
+        position: absolute;
+        right: 15%;
+        bottom: 20px;
+        left: 15%;
+        z-index: 10;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        color: #fff;
+        text-align: center;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, .6)
+    }
+    
+    .carousel-caption .btn {
+        text-shadow: none
+    }
+    
+    #custom_carousel .item {
+        color: #000;
+        /*background-image: linear-gradient(90deg, rgba(253, 105, 132, 0.08) 0%, rgba(247, 158, 129, 0.08) 100%);
+            */
+        padding: 0px;
+        background: #fff5f4;
+        height: 65vh;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    #custom_carousel .controls {
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 0;
+        margin: 0;
+        white-space: nowrap;
+        text-align: center;
+        position: relative;
+        background: #faccbd;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    
+    #custom_carousel .controls li {
+        padding-top: 10px;
+        display: table-cell;
+        width: 1%;
+        max-width: 90px;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+    
+    ul.tabs-nav {
+        margin: 0px;
+        padding: 0px;
+        cursor: pointer;
+    }
+    
+    ul.tabs-nav li:not(:last-child) {
+        border-right: 1px solid white;
+    }
+    
+    #custom_carousel .controls li.active {
+        background-color: #faccbd;
+        /*border-bottom: 2px solid #FB497D;
+            */
+        color: #FB497D !important;
+    }
+    
+    #custom_carousel .controls a small {
+        overflow: hidden;
+        display: block;
+        margin-top: 5px;
+        font-weight: bold
+    }
+    
+    .tab-slider-slides-wrapper {
+        display: flex !important;
+        align-content: space-between;
+        align-items: center;
+        justify-content: center;
+        text-align: left !important;
+        height: 65vh;
+    }
+    
+    .tab-slider-content-div {
+        margin: 30px !important;
+        width: 50%;
+    }
+    
+    .tab-slider-img-div {
+        width: 50%;
+    }
+    
+    .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+        font-size: 3.5rem;
+        font-weight: 800;
+        line-height: 4.5rem;
+        font-family: "Playfair Display";
+        color: #000;
+        text-align: left;
+        margin-bottom: 30px;
+    }
+    
+    .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
+        font-family: "Playfair Display";
+        color: #000;
+        text-align: left;
+        line-height: 2rem;
+        font-weight: 400;
+        font-size: 1.1rem;
+    }
+    
+    .center-text {
+        display: flex;
+        justify-content: center;
+        /* Centers horizontally */
+        align-items: center;
+        /* Centers vertically */
+        /* Ensure the container has a height */
+        text-align: center;
+        /* Ensures the text is centered inside */
+    }
+    
+    .carousel-control {
+        height: 1px;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        font-size: 20px;
+        color: #fff;
+        text-align: center;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+        filter: alpha(opacity=50);
+        opacity: 100%;
+        z-index: 1;
+    }
+    
+    img.glyphicon.glyphicon-chevron-lef {
+        cursor: pointer;
+        position: absolute;
+        left: 10px;
+        top: 35%;
+    }
+    
+    img.glyphicon.glyphicon-chevron-right {
+        cursor: pointer;
+        position: absolute;
+        top: 35%;
+        right: 10px;
+    }
+    
+    .app-redirection-link-img {
+        z-index: 12;
+        color: rgb(255, 255, 255);
+        width: 209.995px;
+        height: 64.3851px;
+        min-height: 0px;
+        min-width: 0px;
+        max-height: none;
+        max-width: none;
+        transform-origin: 50% 50%;
+        opacity: 1;
+        transform: translate(0px, 0px);
+        visibility: visible;
+    }
+    
+    .app-redirection-link-img-wrapper {
+        gap: 10px;
+        display: flex;
+        margin: 20px 0px 20px 0px;
+    }
+    
+    @media screen and (max-width: 2560px) and (min-width:2556px) {
+        .carousel-control {}
+    }
+    
+    @media screen and (min-width: 2555px) and (max-width: 2555px) {
+        .carousel-control {}
+    }
+    
+    @media screen and (min-width:1025px) and (max-width:1249px) {
+        img.glyphicon.glyphicon-chevron-lef {
+            /* width: 15px;*/
             position: absolute;
-            top: 0;
-            width: 100%
+            left: 10px;
+            top: 35%;
         }
-        
-        .carousel-inner>.next {
-            left: 100%
-        }
-        
-        .carousel-inner>.prev {
-            left: -100%
-        }
-        
-        .carousel-inner>.next.left,
-        .carousel-inner>.prev.right {
-            left: 0
-        }
-        
-        .carousel-inner>.active.left {
-            left: -100%
-        }
-        
-        .carousel-inner>.active.right {
-            left: 100%
-        }
-        
-        .carousel-control:hover,
-        .carousel-control:focus {
-            color: #fff;
-            text-decoration: none;
-            filter: alpha(opacity=90);
-            outline: 0;
-            opacity: .9
-        }
-        
-        .carousel-control .icon-prev,
-        .carousel-control .icon-next,
-        .carousel-control .glyphicon-chevron-left,
-        .carousel-control .glyphicon-chevron-right {
+        img.glyphicon.glyphicon-chevron-right {
+            margin-right: 0px !important;
+            /*  width: 15px;
+            */
             position: absolute;
-            top: 50%;
-            z-index: 5;
-            display: inline-block
+            top: 35%;
+            right: 10px;
         }
-        
-        .carousel-control .icon-prev,
-        .carousel-control .glyphicon-chevron-left {
-            left: 50%;
-            margin-left: -10px
-        }
-        
-        .carousel-control .icon-next,
-        .carousel-control .glyphicon-chevron-right {
-            right: 50%;
-            margin-right: -10px
-        }
-        
-        .carousel-control .icon-prev,
-        .carousel-control .icon-next {
-            width: 20px;
-            height: 20px;
-            margin-top: -10px;
-        }
-        
-        .carousel-control .icon-prev:before {
-            content: '\2039'
-        }
-        
-        .carousel-control .icon-next:before {
-            content: '\203a'
-        }
-        
-        .carousel-indicators {
+        .carousel-control {}
+    }
+    
+    @media screen and (min-width:1250px) and (max-width:1439px) {
+        img.glyphicon.glyphicon-chevron-lef {
             position: absolute;
-            bottom: 10px;
-            left: 50%;
-            z-index: 15;
-            width: 60%;
-            padding-left: 0;
-            margin-left: -30%;
-            text-align: center;
-            list-style: none
+            left: 10px;
+            top: 35%;
         }
-        
-        .carousel-indicators li {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            margin: 1px;
-            text-indent: -999px;
-            cursor: pointer;
-            background-color: #000 \9;
-            background-color: rgba(0, 0, 0, 0);
-            border: 1px solid #fff;
-            border-radius: 10px
-        }
-        
-        .carousel-indicators .active {
-            width: 12px;
-            height: 12px;
-            margin: 0;
-            background-color: #fff
-        }
-        
-        .carousel-caption {
+        img.glyphicon.glyphicon-chevron-right {
             position: absolute;
-            right: 15%;
-            bottom: 20px;
-            left: 15%;
-            z-index: 10;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            color: #fff;
-            text-align: center;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, .6)
+            top: 35%;
+            right: 10px;
         }
-        
-        .carousel-caption .btn {
-            text-shadow: none
+        .carousel-control {}
+    }
+    
+    @media screen and (min-width:1440px) and (max-width:1700px) {
+        img.glyphicon.glyphicon-chevron-lef {
+            position: absolute;
+            left: 10px;
+            top: 35%;
         }
-        
-        #custom_carousel .item {
-            color: #000;
-            /*background-image: linear-gradient(90deg, rgba(253, 105, 132, 0.08) 0%, rgba(247, 158, 129, 0.08) 100%);
-                */
+        img.glyphicon.glyphicon-chevron-right {
+            position: absolute;
+            top: 35%;
+            right: 10px;
+        }
+        .carousel-control {}
+    }
+    
+    @media screen and (min-width: 769px) and (max-width: 1024px) {
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+            font-size: 2.5rem !important;
+            font-weight: 800;
+            line-height: 3rem !important;
+            margin-bottom: 10px;
             padding: 0px;
-            background: #fff5f4;
-            height: 65vh;
-            align-items: center;
-            justify-content: center;
         }
-        
-        #custom_carousel .controls {
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding: 0;
-            margin: 0;
-            white-space: nowrap;
-            text-align: center;
-            position: relative;
-            background: #faccbd;
+        .app-redirection-link-img-wrapper {
+            margin: 2px 0px 2px 0px;
         }
-        
         #custom_carousel .controls li {
-            padding-top: 10px;
-            display: table-cell;
-            width: 1%;
-            max-width: 90px;
-            align-items: center;
-            justify-content: center;
+            max-width: 100%;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        img.glyphicon.glyphicon-chevron-lef,
+        img.glyphicon.glyphicon-chevron-right {
+            width: 20px;
+        }
+        .carousel-control {}
+        img.glyphicon.glyphicon-chevron-right {
+            position: absolute;
+            top: 35%;
+            right: 10px;
+        }
+        img.glyphicon.glyphicon-chevron-lef {
+            position: absolute;
+            top: 35%;
+            right: 15px;
+        }
+    }
+    
+    @media screen and (min-width:500px) and (max-width:768px) {
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+            font-size: 3.5rem !important;
+            line-height: 4.5rem !important;
             text-align: center;
-            padding-top: 30px;
-            padding-bottom: 30px;
+            margin-bottom: 30px !important;
         }
-        
-        ul.tabs-nav {
-            margin: 0px;
-            padding: 0px;
-            cursor: pointer;
+        .carousel-control {}
+        img.glyphicon.glyphicon-chevron-right {
+            width: 25px;
+            position: absolute;
+            top: 35%;
+            right: 10px;
         }
-        
+        img.glyphicon.glyphicon-chevron-lef {
+            width: 25px;
+            position: absolute;
+            left: 10px;
+            top: 35%;
+        }
+        #custom_carousel .controls li {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 0px;
+            padding-right: 0px;
+            display: none;
+        }
         #custom_carousel .controls li.active {
             background-color: #faccbd;
-            /*border-bottom: 2px solid #FB497D;
-                */
             color: #FB497D !important;
-        }
-        
-        #custom_carousel .controls a small {
-            overflow: hidden;
             display: block;
-            margin-top: 5px;
-            font-weight: bold
+            width: 70%;
+            margin: 0px auto;
+            text-align: center !important;
         }
-        
-        .tab-slider-slides-wrapper {
-            display: flex !important;
-            align-content: space-between;
-            align-items: center;
-            justify-content: center;
-            text-align: left !important;
-            height: 65vh;
-        }
-        
-        .tab-slider-content-div {
-            margin: 30px !important;
-            width: 50%;
-        }
-        
-        .tab-slider-img-div {
-            width: 50%;
-        }
-        
+    }
+    
+    @media screen and (min-width:426px) and (max-width:499px) {
         .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 4.5rem;
-            font-family: "Playfair Display";
-            color: #000;
-            text-align: left;
-            margin-bottom: 30px;
-        }
-        
-        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
-            font-family: "Playfair Display";
-            color: #000;
-            text-align: left;
-            line-height: 2rem;
-            font-weight: 400;
-            font-size: 1.1rem;
-        }
-        
-        .center-text {
-            display: flex;
-            justify-content: center;
-            /* Centers horizontally */
-            align-items: center;
-            /* Centers vertically */
-            /* Ensure the container has a height */
+            font-size: 2.5rem !important;
+            line-height: 3rem !important;
             text-align: center;
-            /* Ensures the text is centered inside */
+            margin-bottom: 30px !important;
         }
-        
-        .carousel-control {
-            height: 1px;
-            position: absolute;
-            top: 92%;
-            bottom: 0;
-            left: 0;
+        ul.tabs-nav {
+            padding: 0px !important;
             width: 100%;
-            font-size: 20px;
-            color: #fff;
-            text-align: center;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
-            filter: alpha(opacity=50);
-            opacity: 100%;
-            z-index: 1;
+            margin: 0px auto;
         }
-        
-        img.glyphicon.glyphicon-chevron-lef {
-            left: 5% !important;
-            position: absolute;
-            top: 92%;
+        .tabs-nav li.active span {
+            padding-bottom: 10px;
+            display: block;
+            align-items: center !important;
+            text-align: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            margin: 0px auto;
         }
-        
+        .tabs-nav li span {
+            display: none;
+        }
+        #custom_carousel .controls li {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 0px;
+            padding-right: 0px;
+            display: none;
+        }
+        #custom_carousel .controls li.active {
+            background-color: #faccbd;
+            color: #FB497D !important;
+            display: block;
+            width: 70%;
+            margin: 0px auto;
+            text-align: center !important;
+        }
+        .carousel-control {}
         img.glyphicon.glyphicon-chevron-right {
-            right: 5%;
-            top: 94%;
+            width: 25px;
+            position: absolute;
+            top: 35%;
+            right: 10px;
         }
-        
-        .app-redirection-link-img {
-            z-index: 12;
-            color: rgb(255, 255, 255);
-            width: 209.995px;
-            height: 64.3851px;
-            min-height: 0px;
-            min-width: 0px;
-            max-height: none;
-            max-width: none;
-            transform-origin: 50% 50%;
-            opacity: 1;
-            transform: translate(0px, 0px);
-            visibility: visible;
+        img.glyphicon.glyphicon-chevron-lef {
+            width: 25px;
+            position: absolute;
+            left: 10px;
+            top: 35%;
         }
-        
-        .app-redirection-link-img-wrapper {
-            gap: 10px;
-            display: flex;
-            margin: 20px 0px 20px 0px;
+    }
+    
+    @media screen and (min-width:426px) and (max-width:768px) {
+        .tabs-nav li.active span {
+            padding-bottom: 10px;
         }
-        
-        @media screen and (max-width: 2560px) and (min-width:2556px) {
-            .carousel-control {
-                top: 93%;
-            }
+        #custom_carousel .item,
+        .tab-slider-slides-wrapper {
+            height: auto;
         }
-        
-        @media screen and (min-width: 2555px) and (max-width: 2555px) {
-            .carousel-control {
-                top: 94.5%;
-            }
+        .tab-slider-content-div,
+        .tab-slider-img-div {
+            width: 100%;
         }
-        
-        @media screen and (min-width:1025px) and (max-width:1249px) {
-            img.glyphicon.glyphicon-chevron-lef {
-                left: 1% !important;
-                /* width: 15px;*/
-            }
-            img.glyphicon.glyphicon-chevron-right {
-                right: 1%;
-                margin-right: 0px !important;
-                /*  width: 15px;
-                */
-            }
-            .carousel-control {
-                top: 90%;
-            }
+        #custom_carousel .controls li {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 30px;
+            padding-right: 30px;
         }
-        
-        @media screen and (min-width:1250px) and (max-width:1439px) {
-            img.glyphicon.glyphicon-chevron-lef {
-                left: 2% !important;
-            }
-            img.glyphicon.glyphicon-chevron-right {
-                right: 2%;
-            }
-            .carousel-control {
-                top: 90.5%;
-            }
+        .tab-slider-content-div {
+            margin: 0px !important;
+            margin-top: 40px !important;
+            margin-bottom: 50px !important;
         }
-        
-        @media screen and (min-width:1440px) and (max-width:1700px) {
-            img.glyphicon.glyphicon-chevron-lef {
-                left: 2% !important;
-            }
-            img.glyphicon.glyphicon-chevron-right {
-                right: 2%;
-            }
-            .carousel-control {
-                top: 90.5%;
-            }
+        .tab-slider-slides-wrapper {
+            display: block !important;
         }
-        
-        @media screen and (min-width: 769px) and (max-width: 1024px) {
-            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
-                font-size: 2.5rem !important;
-                font-weight: 800;
-                line-height: 3rem !important;
-                margin-bottom: 10px;
-                padding: 0px;
-            }
-            .app-redirection-link-img-wrapper {
-                margin: 2px 0px 2px 0px;
-            }
-            #custom_carousel .controls li {
-                max-width: 100%;
-                padding-left: 10px;
-                padding-right: 10px;
-            }
-            img.glyphicon.glyphicon-chevron-lef,
-            img.glyphicon.glyphicon-chevron-right {
-                width: 20px;
-            }
-            .carousel-control {
-                top: 90.5%;
-            }
-            img.glyphicon.glyphicon-chevron-right {
-                right: 1.5%;
-            }
-            img.glyphicon.glyphicon-chevron-lef {
-                left: 0.3% !important;
-            }
-        }
-        
-        @media screen and (min-width:500px) and (max-width:768px) {
-            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
-                font-size: 3.5rem !important;
-                line-height: 4.5rem !important;
-                text-align: center;
-                margin-bottom: 30px !important;
-            }
-            .carousel-control {
-                top: 50%;
-            }
-            img.glyphicon.glyphicon-chevron-right {
-                width: 25px;
-                right: 3% !important;
-            }
-            img.glyphicon.glyphicon-chevron-lef {
-                width: 25px;
-                left: 2% !important;
-            }
-        }
-        
-        @media screen and (min-width:426px) and (max-width:499px) {
-            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
-                font-size: 2.5rem !important;
-                line-height: 3rem !important;
-                text-align: center;
-                margin-bottom: 30px !important;
-            }
-            ul.tabs-nav {
-                padding: 0px !important;
-                width: 100%;
-                margin: 0px auto;
-            }
-            .tabs-nav li.active span {
-                padding-bottom: 10px;
-                display: block;
-                align-items: center !important;
-                text-align: center !important;
-                justify-content: center !important;
-                width: 100% !important;
-                margin: 0px auto;
-            }
-            .tabs-nav li span {
-                display: none;
-            }
-            #custom_carousel .controls li {
-                width: 100%;
-                max-width: 100%;
-                padding-left: 0px;
-                padding-right: 0px;
-                display: none;
-            }
-            #custom_carousel .controls li.active {
-                background-color: #faccbd;
-                color: #FB497D !important;
-                display: block;
-                width: 70%;
-                margin: 0px auto;
-                text-align: center !important;
-            }
-            .carousel-control {
-                top: 91.4%;
-            }
-            img.glyphicon.glyphicon-chevron-right {
-                width: 25px;
-                right: 3% !important;
-            }
-            img.glyphicon.glyphicon-chevron-lef {
-                width: 25px;
-                left: 1% !important;
-            }
-        }
-        
-        @media screen and (min-width:426px) and (max-width:768px) {
-            .tabs-nav li.active span {
-                padding-bottom: 10px;
-            }
-            #custom_carousel .item,
-            .tab-slider-slides-wrapper {
-                height: auto;
-            }
-            .tab-slider-content-div,
-            .tab-slider-img-div {
-                width: 100%;
-            }
-            #custom_carousel .controls li {
-                width: 100%;
-                max-width: 100%;
-                padding-left: 30px;
-                padding-right: 30px;
-            }
-            .tab-slider-content-div {
-                margin: 0px !important;
-                margin-top: 40px !important;
-                margin-bottom: 50px !important;
-            }
-            .tab-slider-slides-wrapper {
-                display: block !important;
-            }
-            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
-                text-align: center;
-                width: 80%;
-                margin: 0px auto;
-            }
-            .app-redirection-link-img-wrapper {
-                justify-content: center;
-                margin-bottom: 30px !important;
-                margin-left: 6px;
-                margin-right: 6px;
-            }
-            .tab-slider-img-div img {
-                height: auto !important;
-            }
-        }
-        
-        @media screen and (min-width:376px) and (max-width:425px) {
-            ul.tabs-nav {
-                padding: 0px !important;
-                width: 100%;
-                margin: 0px auto;
-            }
-            .tabs-nav li.active span {
-                padding-bottom: 10px;
-                display: block;
-                align-items: center !important;
-                text-align: center !important;
-                justify-content: center !important;
-                width: 100% !important;
-                margin: 0px auto;
-            }
-            .tabs-nav li span {
-                display: none;
-            }
-            #custom_carousel .controls li {
-                width: 100%;
-                max-width: 100%;
-                padding-left: 0px;
-                padding-right: 0px;
-                display: none;
-            }
-            #custom_carousel .controls li.active {
-                background-color: #faccbd;
-                color: #FB497D !important;
-                display: block;
-                width: 70%;
-                margin: 0px auto;
-                text-align: center !important;
-            }
-            img.glyphicon.glyphicon-chevron-right {
-                right: 2.5%;
-                margin-right: 0px;
-                width: 25px;
-            }
-            img.glyphicon.glyphicon-chevron-lef {
-                left: 2% !important;
-                width: 25px;
-            }
-            .carousel-control {
-                top: 91.4%;
-            }
-            #custom_carousel .item,
-            .tab-slider-slides-wrapper {
-                height: auto;
-            }
-            .tab-slider-content-div,
-            .tab-slider-img-div {
-                width: 100%;
-            }
-            .tab-slider-content-div {
-                margin: 0px !important;
-                margin-top: 40px !important;
-                margin-bottom: 50px !important;
-            }
-            .tab-slider-slides-wrapper {
-                display: block !important;
-            }
-            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
-                font-size: 2.5rem !important;
-                line-height: 3rem !important;
-                text-align: center;
-                margin-bottom: 30px !important;
-            }
-            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
-                text-align: center;
-                width: 90%;
-                margin: 0px auto;
-            }
-            .app-redirection-link-img-wrapper {
-                justify-content: center;
-                margin-bottom: 30px !important;
-            }
-            .app-redirection-link-img {
-                max-width: 100% !important;
-                width: 100%;
-                width: fit-content;
-                height: 50px !important;
-            }
-            .tab-slider-img-div img {
-                height: auto !important;
-            }
-        }
-        
-        @media screen and (min-width:321px) and (max-width:375px) {
-            ul.tabs-nav {
-                padding: 0px !important;
-                width: 100%;
-                margin: 0px auto;
-            }
-            .tabs-nav li.active span {
-                padding-bottom: 10px;
-                display: block;
-                align-items: center !important;
-                text-align: center !important;
-                justify-content: center !important;
-                width: 100% !important;
-                margin: 0px auto;
-            }
-            .tabs-nav li span {
-                display: none;
-            }
-            img.glyphicon.glyphicon-chevron-right {
-                right: 2.5%;
-                margin-right: 0px;
-                width: 25px;
-            }
-            img.glyphicon.glyphicon-chevron-lef {
-                left: 2% !important;
-                width: 25px;
-            }
-            .carousel-control {
-                top: 90.5%;
-            }
-            #custom_carousel .item,
-            .tab-slider-slides-wrapper {
-                height: auto;
-            }
-            .tab-slider-content-div,
-            .tab-slider-img-div {
-                width: 100%;
-            }
-            #custom_carousel .controls li {
-                width: 100%;
-                max-width: 100%;
-                padding-left: 0px;
-                padding-right: 0px;
-                display: none;
-            }
-            #custom_carousel .controls li.active {
-                background-color: #faccbd;
-                color: #FB497D !important;
-                display: block;
-                width: 70%;
-                margin: 0px auto;
-                text-align: center !important;
-            }
-            .tab-slider-content-div {
-                margin: 0px !important;
-                margin-top: 30px !important;
-                margin-bottom: 40px !important;
-            }
-            .tab-slider-slides-wrapper {
-                display: block !important;
-            }
-            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
-                font-size: 2.2rem !important;
-                line-height: 2.5rem !important;
-                text-align: center;
-                margin-bottom: 10px !important;
-            }
-            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
-                text-align: center;
-                width: 90%;
-                margin: 0px auto;
-            }
-            .app-redirection-link-img-wrapper {
-                justify-content: center;
-                margin-bottom: 30px !important;
-            }
-            .app-redirection-link-img {
-                max-width: 100% !important;
-                width: 100%;
-                width: fit-content;
-                height: 50px !important;
-            }
-            .tab-slider-img-div img {
-                height: auto !important;
-            }
-        }
-        
-        @media screen and (max-width:320px) {
-            .tabs-nav li span {
-                display: none;
-            }
-            ul.tabs-nav {
-                padding: 0px !important;
-                width: 100%;
-                margin: 0px auto;
-            }
-            .tabs-nav li.active span {
-                padding-bottom: 10px;
-                display: block;
-                align-items: center !important;
-                text-align: center !important;
-                justify-content: center !important;
-                width: 100% !important;
-                margin: 0px auto;
-            }
-            img.glyphicon.glyphicon-chevron-right {
-                right: 2.5%;
-                margin-right: 0px;
-                width: 25px;
-            }
-            img.glyphicon.glyphicon-chevron-lef {
-                left: 2% !important;
-                width: 25px;
-            }
-            .carousel-control {
-                top: 90%;
-            }
-            #custom_carousel .item,
-            .tab-slider-slides-wrapper {
-                height: auto;
-            }
-            .tab-slider-content-div,
-            .tab-slider-img-div {
-                width: 100%;
-            }
-            #custom_carousel .controls li {
-                width: 100%;
-                max-width: 100%;
-                padding-left: 0px;
-                padding-right: 0px;
-                display: none;
-            }
-            #custom_carousel .controls li.active {
-                background-color: #faccbd;
-                color: #FB497D !important;
-                display: block;
-                width: 70%;
-                margin: 0px auto;
-                text-align: center !important;
-            }
-            .tab-slider-content-div {
-                margin: 0px !important;
-                margin-top: 30px !important;
-                margin-bottom: 30px !important;
-            }
-            .tab-slider-slides-wrapper {
-                display: block !important;
-            }
-            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
-                font-size: 2rem !important;
-                line-height: 2.5rem !important;
-                text-align: center;
-                margin-bottom: 10px !important;
-            }
-            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
-                text-align: center;
-                width: 90%;
-                margin: 0px auto;
-            }
-            .app-redirection-link-img-wrapper {
-                justify-content: center;
-                margin-bottom: 30px !important;
-            }
-            .app-redirection-link-img {
-                max-width: 100% !important;
-                width: 100%;
-                width: fit-content;
-                height: 40px !important;
-            }
-            .tab-slider-img-div img {
-                height: auto !important;
-            }
-        }
-        
-        .text-center {
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
             text-align: center;
-            font-size: 14px;
-            font-weight: 500;
-            text-transform: none;
-            line-height: 17px;
-            font-family: "Plus Jakarta Sans", Sans-serif;
+            width: 80%;
+            margin: 0px auto;
         }
-        /*banner text resizing on different screens*/
-        
-        @media screen and (min-width: 1093px) and (max-width: 1261px) {
-            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
-                font-size: 3rem;
-                line-height: 3.5rem;
-                margin-bottom: 20px;
-            }
+        .app-redirection-link-img-wrapper {
+            justify-content: center;
+            margin-bottom: 30px !important;
+            margin-left: 6px;
+            margin-right: 6px;
         }
-        
-        @media screen and (min-width:1025px) and (max-width:1092px) {
-            .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
-                font-size: 2.5rem;
-                line-height: 3rem;
-                margin-bottom: 10px;
-            }
+        .tab-slider-img-div img {
+            height: auto !important;
         }
-    </style>
+    }
+    
+    @media screen and (min-width:376px) and (max-width:426px) {
+        ul.tabs-nav {
+            padding: 0px !important;
+            width: 100%;
+            margin: 0px auto;
+        }
+        .tabs-nav li.active span {
+            padding-bottom: 10px;
+            display: block;
+            align-items: center !important;
+            text-align: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            margin: 0px auto;
+        }
+        .tabs-nav li span {
+            display: none;
+        }
+        #custom_carousel .controls li {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 0px;
+            padding-right: 0px;
+            display: none;
+        }
+        #custom_carousel .controls li.active {
+            background-color: #faccbd;
+            color: #FB497D !important;
+            display: block;
+            width: 70%;
+            margin: 0px auto;
+            text-align: center !important;
+        }
+        img.glyphicon.glyphicon-chevron-right {
+            margin-right: 0px;
+            width: 25px;
+            position: absolute;
+            top: 35%;
+            right: 10px;
+        }
+        img.glyphicon.glyphicon-chevron-lef {
+            width: 25px;
+            position: absolute;
+            left: 10px;
+            top: 35%;
+        }
+        .carousel-control {}
+        #custom_carousel .item,
+        .tab-slider-slides-wrapper {
+            height: auto;
+        }
+        .tab-slider-content-div,
+        .tab-slider-img-div {
+            width: 100%;
+        }
+        .tab-slider-content-div {
+            margin: 0px !important;
+            margin-top: 40px !important;
+            margin-bottom: 50px !important;
+        }
+        .tab-slider-slides-wrapper {
+            display: block !important;
+        }
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+            font-size: 2.5rem !important;
+            line-height: 3rem !important;
+            text-align: center;
+            margin-bottom: 30px !important;
+        }
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
+            text-align: center;
+            width: 90%;
+            margin: 0px auto;
+        }
+        .app-redirection-link-img-wrapper {
+            justify-content: center;
+            margin-bottom: 30px !important;
+        }
+        .app-redirection-link-img {
+            max-width: 100% !important;
+            width: 100%;
+            width: fit-content;
+            height: 50px !important;
+        }
+        .tab-slider-img-div img {
+            height: auto !important;
+        }
+    }
+    
+    @media screen and (min-width:321px) and (max-width:376px) {
+        ul.tabs-nav {
+            padding: 0px !important;
+            width: 100%;
+            margin: 0px auto;
+        }
+        .tabs-nav li.active span {
+            padding-bottom: 10px;
+            display: block;
+            align-items: center !important;
+            text-align: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            margin: 0px auto;
+        }
+        .tabs-nav li span {
+            display: none;
+        }
+        img.glyphicon.glyphicon-chevron-right {
+            margin-right: 0px;
+            width: 25px;
+            position: absolute;
+            top: 35%;
+            right: 10px;
+        }
+        img.glyphicon.glyphicon-chevron-lef {
+            width: 25px;
+            position: absolute;
+            left: 10px;
+            top: 35%;
+        }
+        .carousel-control {}
+        #custom_carousel .item,
+        .tab-slider-slides-wrapper {
+            height: auto;
+        }
+        .tab-slider-content-div,
+        .tab-slider-img-div {
+            width: 100%;
+        }
+        #custom_carousel .controls li {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 0px;
+            padding-right: 0px;
+            display: none;
+        }
+        #custom_carousel .controls li.active {
+            background-color: #faccbd;
+            color: #FB497D !important;
+            display: block;
+            width: 70%;
+            margin: 0px auto;
+            text-align: center !important;
+        }
+        .tab-slider-content-div {
+            margin: 0px !important;
+            margin-top: 30px !important;
+            margin-bottom: 40px !important;
+        }
+        .tab-slider-slides-wrapper {
+            display: block !important;
+        }
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+            font-size: 2.2rem !important;
+            line-height: 2.5rem !important;
+            text-align: center;
+            margin-bottom: 10px !important;
+        }
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
+            text-align: center;
+            width: 90%;
+            margin: 0px auto;
+        }
+        .app-redirection-link-img-wrapper {
+            justify-content: center;
+            margin-bottom: 30px !important;
+        }
+        .app-redirection-link-img {
+            max-width: 100% !important;
+            width: 100%;
+            width: fit-content;
+            height: 50px !important;
+        }
+        .tab-slider-img-div img {
+            height: auto !important;
+        }
+    }
+    
+    @media screen and (max-width:320px) {
+        .tabs-nav li span {
+            display: none;
+        }
+        ul.tabs-nav {
+            padding: 0px !important;
+            width: 100%;
+            margin: 0px auto;
+        }
+        .tabs-nav li.active span {
+            padding-bottom: 10px;
+            display: block;
+            align-items: center !important;
+            text-align: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            margin: 0px auto;
+        }
+        img.glyphicon.glyphicon-chevron-right {
+            margin-right: 0px;
+            width: 25px;
+            position: absolute;
+            top: 35%;
+            right: 10px;
+        }
+        img.glyphicon.glyphicon-chevron-lef {
+            width: 25px;
+            position: absolute;
+            left: 10px;
+            top: 35%;
+        }
+        .carousel-control {}
+        #custom_carousel .item,
+        .tab-slider-slides-wrapper {
+            height: auto;
+        }
+        .tab-slider-content-div,
+        .tab-slider-img-div {
+            width: 100%;
+        }
+        #custom_carousel .controls li {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 0px;
+            padding-right: 0px;
+            display: none;
+        }
+        #custom_carousel .controls li.active {
+            background-color: #faccbd;
+            color: #FB497D !important;
+            display: block;
+            width: 70%;
+            margin: 0px auto;
+            text-align: center !important;
+        }
+        .tab-slider-content-div {
+            margin: 0px !important;
+            margin-top: 30px !important;
+            margin-bottom: 30px !important;
+        }
+        .tab-slider-slides-wrapper {
+            display: block !important;
+        }
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+            font-size: 2rem !important;
+            line-height: 2.5rem !important;
+            text-align: center;
+            margin-bottom: 10px !important;
+        }
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-para {
+            text-align: center;
+            width: 90%;
+            margin: 0px auto;
+        }
+        .app-redirection-link-img-wrapper {
+            justify-content: center;
+            margin-bottom: 30px !important;
+        }
+        .app-redirection-link-img {
+            max-width: 100% !important;
+            width: 100%;
+            width: fit-content;
+            height: 40px !important;
+        }
+        .tab-slider-img-div img {
+            height: auto !important;
+        }
+    }
+    
+    .text-center {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+        text-transform: none;
+        line-height: 17px;
+        font-family: "Plus Jakarta Sans", Sans-serif;
+    }
+    /*banner text resizing on different screens*/
+    
+    @media screen and (min-width: 1093px) and (max-width: 1261px) {
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+            font-size: 3rem;
+            line-height: 3.5rem;
+            margin-bottom: 20px;
+        }
+    }
+    
+    @media screen and (min-width:1025px) and (max-width:1092px) {
+        .tab-slider-slides-wrapper .tab-slider-content-div .tab-slider-content-div-head {
+            font-size: 2.5rem;
+            line-height: 3rem;
+            margin-bottom: 10px;
+        }
+    }
+    
+    @media screen and (min-width:320px) and (max-width:769px) {
+        ul.tabs-nav li {
+            border-right: none !important;
+        }
+    }
+</style>
 </head>
-
 <body>
     <div class="">
-        <div class="row tab-slider-slides-main-wrapper">
-            <div class="featurette" id="about">
-                <!------------------------code---------------start---------------->
-                <div class="">
-                    <div id="custom_carousel" class="custom-carousel slide" data-interval="2500" data-ride="carousel">
-                        <!-- Wrapper for slides -->
-                        <div class="carousel-inner">
-                            <div class="item active">
-                                <div class="tab-slider-single-slide-wrapper">
-                                    <div class=" tab-slider-slides-wrapper">
-                                        <div class="tab-slider-content-div">
-                                            <h2 class="tab-slider-content-div-head">Welcome to Color Kahar <br> Your <span style="color: #FB497D;">  Premium Online  </span>Photo Printing App</h2>
-                                            <p class="tab-slider-content-div-para">Create Amazing Photo Albums, Prints, and More, All from Your Phone! 📸✨</p>
-                                            <div class="app-redirection-link-img-wrapper"><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155028.webp" alt=""><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155027.webp"
-                                                    alt="">
-                                            </div>
+    <div class="row tab-slider-slides-main-wrapper">
+        <div class="featurette" id="about">
+            <!------------------------code---------------start---------------->
+            <div class="">
+                <div id="custom_carousel" class="custom-carousel slide" data-interval="2500" data-ride="carousel">
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <div class="tab-slider-single-slide-wrapper">
+                                <div class=" tab-slider-slides-wrapper">
+                                    <div class="tab-slider-content-div">
+                                        <h2 class="tab-slider-content-div-head">Welcome to Color Kahar <br> Your <span style="color: #FB497D;">  Premium Online  </span>Photo Printing App</h2>
+                                        <p class="tab-slider-content-div-para">Create Amazing Photo Albums, Prints, and More, All from Your Phone! 📸✨</p>
+                                        <div class="app-redirection-link-img-wrapper"><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155028.webp" alt=""><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155027.webp"
+                                                alt="">
                                         </div>
-                                        <div class="tab-slider-img-div"><img style="width: 100%; height:fit-content;" src="https://dev.colorkahar.com/wp-content/uploads/2024/01/retro-feature-size-01.webp" class=""></div>
                                     </div>
+                                    <div class="tab-slider-img-div"><img style="width: 100%; height:fit-content;" src="https://dev.colorkahar.com/wp-content/uploads/2024/01/retro-feature-size-01.webp" class=""></div>
                                 </div>
                             </div>
-                            <div class="item ">
-                                <div class="tab-slider-single-slide-wrapper">
-                                    <div class=" tab-slider-slides-wrapper">
-                                        <div class="tab-slider-content-div">
-                                            <h2 class="tab-slider-content-div-head">Explore Our Range of <span style="color: #FB497D;">  Photo  </span>Products</h2>
-                                            <p class="tab-slider-content-div-para">Discover Expertly Designed Themed Photobooks, Retro Prints, Mugs, and More - Personalize It Your Way! 📚🎨</p>
-                                            <div class="app-redirection-link-img-wrapper"><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155028.webp" alt=""><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155027.webp"
-                                                    alt="">
-                                            </div>
-                                        </div>
-                                        <div class="tab-slider-img-div"><img style="width: 100%; height:fit-content;" src="https://dev.colorkahar.com/wp-content/uploads/2024/01/retro-feature-size-01.webp" class=""></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item ">
-                                <div class="tab-slider-single-slide-wrapper">
-                                    <div class=" tab-slider-slides-wrapper">
-                                        <div class="tab-slider-content-div">
-                                            <h2 class="tab-slider-content-div-head">Join Our Tree : <span style="color: #FB497D;"> Planting </span>Mission </h2>
-                                            <p class="tab-slider-content-div-para">Making a Wall Calendar or a Color Tile? You're Also Planting Trees! Let's Make Pakistan Greener Together! 🌳🌍</p>
-                                            <div class="app-redirection-link-img-wrapper"><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155028.webp" alt=""><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155027.webp"
-                                                    alt="">
-                                            </div>
-                                        </div>
-                                        <div class="tab-slider-img-div"><img style="width: 100%; height:fit-content;" src="https://dev.colorkahar.com/wp-content/uploads/2024/01/retro-feature-size-01.webp" class=""></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item ">
-                                <div class="tab-slider-single-slide-wrapper">
-                                    <div class=" tab-slider-slides-wrapper">
-                                        <div class="tab-slider-content-div">
-                                            <h2 class="tab-slider-content-div-head">Grab Our <span style="color: #FB497D;"> Latest </span>Deals </h2>
-                                            <p class="tab-slider-content-div-para">Who doesn't love discounts? Explore our latest promotions and keep an eye out for exciting new offers! 💰🎉</p>
-                                            <div class="app-redirection-link-img-wrapper"><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155028.webp" alt=""><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155027.webp"
-                                                    alt="">
-                                            </div>
-                                        </div>
-                                        <div class="tab-slider-img-div"><img style="width: 100%; height:fit-content;" src="https://dev.colorkahar.com/wp-content/uploads/2024/01/retro-feature-size-01.webp" class=""></div>
-                                    </div>
-                                </div>
-                            </div>
-    
                         </div>
-    
-                        <a class="left carousel-control" role="button" data-slide="prev">
-                            <img class="glyphicon glyphicon-chevron-lef" src="https://dev.colorkahar.com/wp-content/uploads/2025/01/tab-slider-left-arrow.png.png" alt="Previous">
-                        </a>
-                        <a class="right carousel-control" role="button" data-slide="next">
-                            <img class="glyphicon glyphicon-chevron-right" src="https://dev.colorkahar.com/wp-content/uploads/2025/01/tab-slider-right-arrow.png" alt="Next">
-    
-                        </a>
-    
-                        <div class="controls">
-                            <ul class="tabs-nav">
-                                <li data-target="#custom_carousel" data-slide-to="0" class="active">
-                                    <span class=" text-center" style="max-width: fit-content;"> Welcome to Color Kahar💍✈️ </span>
-                                </li>
-                                <li data-target="#custom_carousel" data-slide-to="1">
-                                    <span class="text-center" style="max-width: fit-content;"> Explore Photo Products 📚🎨</span>
-                                </li>
-                                <li data-target="#custom_carousel" data-slide-to="2">
-                                    <span class=" text-center" style="max-width: fit-content;">Join Our Tree 🌳🌍</span>
-                                </li>
-                                <li data-target="#custom_carousel" data-slide-to="3">
-                                    <span class=" text-center" style="max-width: fit-content;">Grab Our Latest Deals 💰🎉</span>
-                                    <!-- <li data-target="#custom_carousel" data-slide-to="4">
-                                            <a href="#"><img src="http://placemi.com/bbqez/230x220"><small>wexi</small></a>
-                                        </li> -->
-                            </ul>
+                        <div class="item ">
+                            <div class="tab-slider-single-slide-wrapper">
+                                <div class=" tab-slider-slides-wrapper">
+                                    <div class="tab-slider-content-div">
+                                        <h2 class="tab-slider-content-div-head">Explore Our Range of <span style="color: #FB497D;">  Photo  </span>Products</h2>
+                                        <p class="tab-slider-content-div-para">Discover Expertly Designed Themed Photobooks, Retro Prints, Mugs, and More - Personalize It Your Way! 📚🎨</p>
+                                        <div class="app-redirection-link-img-wrapper"><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155028.webp" alt=""><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155027.webp"
+                                                alt="">
+                                        </div>
+                                    </div>
+                                    <div class="tab-slider-img-div"><img style="width: 100%; height:fit-content;" src="https://dev.colorkahar.com/wp-content/uploads/2024/01/retro-feature-size-01.webp" class=""></div>
+                                </div>
+                            </div>
                         </div>
+                        <div class="item ">
+                            <div class="tab-slider-single-slide-wrapper">
+                                <div class=" tab-slider-slides-wrapper">
+                                    <div class="tab-slider-content-div">
+                                        <h2 class="tab-slider-content-div-head">Join Our Tree : <span style="color: #FB497D;"> Planting </span>Mission </h2>
+                                        <p class="tab-slider-content-div-para">Making a Wall Calendar or a Color Tile? You're Also Planting Trees! Let's Make Pakistan Greener Together! 🌳🌍</p>
+                                        <div class="app-redirection-link-img-wrapper"><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155028.webp" alt=""><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155027.webp"
+                                                alt="">
+                                        </div>
+                                    </div>
+                                    <div class="tab-slider-img-div"><img style="width: 100%; height:fit-content;" src="https://dev.colorkahar.com/wp-content/uploads/2024/01/retro-feature-size-01.webp" class=""></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item ">
+                            <div class="tab-slider-single-slide-wrapper">
+                                <div class=" tab-slider-slides-wrapper">
+                                    <div class="tab-slider-content-div">
+                                        <h2 class="tab-slider-content-div-head">Grab Our <span style="color: #FB497D;"> Latest </span>Deals </h2>
+                                        <p class="tab-slider-content-div-para">Who doesn't love discounts? Explore our latest promotions and keep an eye out for exciting new offers! 💰🎉</p>
+                                        <div class="app-redirection-link-img-wrapper"><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155028.webp" alt=""><img class="app-redirection-link-img" src="https://dev.colorkahar.com/wp-content/uploads/2023/08/Group-1261155027.webp"
+                                                alt="">
+                                        </div>
+                                    </div>
+                                    <div class="tab-slider-img-div"><img style="width: 100%; height:fit-content;" src="https://dev.colorkahar.com/wp-content/uploads/2024/01/retro-feature-size-01.webp" class=""></div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                    <!-- End Carousel -->
+
+
+
+
+                    <div class="controls">
+                        <span>
+                            <a class="left carousel-control" role="button" data-slide="prev">
+                                <img class="glyphicon glyphicon-chevron-lef" src="https://dev.colorkahar.com/wp-content/uploads/2025/01/tab-slider-left-arrow.png.png" alt="Previous">
+                            </a>
+                            </span>
+                        <ul class="tabs-nav">
+
+                            <li data-target="#custom_carousel" data-slide-to="0" class="active">
+                                <span class=" text-center" style="max-width: fit-content;"> Welcome to Color Kahar💍✈️ </span>
+                            </li>
+                            <li data-target="#custom_carousel" data-slide-to="1">
+                                <span class="text-center" style="max-width: fit-content;"> Explore Photo Products 📚🎨</span>
+                            </li>
+                            <li data-target="#custom_carousel" data-slide-to="2">
+                                <span class=" text-center" style="max-width: fit-content;">Join Our Tree 🌳🌍</span>
+                            </li>
+                            <li data-target="#custom_carousel" data-slide-to="3">
+                                <span class=" text-center" style="max-width: fit-content;">Grab Our Latest Deals 💰🎉</span>
+                                <!-- <li data-target="#custom_carousel" data-slide-to="4">
+                                        <a href="#"><img src="http://placemi.com/bbqez/230x220"><small>wexi</small></a>
+                                    </li> -->
+                            </li>
+                        </ul>
+                        <span>
+                            <a class="right carousel-control" role="button" data-slide="next">
+                                <img class="glyphicon glyphicon-chevron-right" src="https://dev.colorkahar.com/wp-content/uploads/2025/01/tab-slider-right-arrow.png" alt="Next">
+
+                            </a>
+                        </span>
+                    </div>
                 </div>
-                <!----Code------end----------------------------------->
+                <!-- End Carousel -->
             </div>
+            <!----Code------end----------------------------------->
         </div>
     </div>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            // Initialize the carousel with auto-slide interval
-            $('#custom_carousel').carousel({
-                interval: 2500
-            });
-    
-            // Function to scroll the active tab into view horizontally without affecting vertical scroll
-            function scrollToActiveTab() {
-                const activeTab = document.querySelector('.tabs-nav li.active'); // Get the active tab element
-                const tabsNav = document.querySelector('.tabs-nav'); // Get the parent container of the tabs
-    
-                if (activeTab && tabsNav) {
-                    const scrollLeft = activeTab.offsetLeft - (tabsNav.clientWidth / 2) + (activeTab.clientWidth / 2);
-                    tabsNav.scrollTo({
-                        left: scrollLeft,
-                        behavior: 'smooth' // Smooth scrolling for better UX
-                    });
-                }
-            }
-    
-            // Sync tabs with slide changes
-            $('#custom_carousel').on('slide.bs.carousel', function(evt) {
-                const nextIndex = $(evt.relatedTarget).index(); // Get the index of the next slide
-    
-                // Remove active class from all tabs
-                $('.tabs-nav li').removeClass('active');
-                // Add active class to the corresponding tab
-                $('.tabs-nav li:eq(' + nextIndex + ')').addClass('active');
-    
-                // Scroll to the active tab
-                scrollToActiveTab();
-            });
-    
-            // Handle tab clicks
-            $('.tabs-nav li').click(function() {
-                const slideToIndex = $(this).index(); // Get the index of the clicked tab
-                $('#custom_carousel').carousel(slideToIndex); // Move to the corresponding slide
-    
-                // Update tabs' active state
-                $('.tabs-nav li').removeClass('active');
-                $(this).addClass('active');
-    
-                // Scroll to the active tab
-                scrollToActiveTab();
-            });
-    
-            // Arrow controls: Next and Previous
-            $('.left.carousel-control').click(function() {
-                $('#custom_carousel').carousel('prev'); // Move to the previous slide
-            });
-    
-            $('.right.carousel-control').click(function() {
-                $('#custom_carousel').carousel('next'); // Move to the next slide
-            });
-    
-            // To control height of tabs on tablet and mobile devices
-            function adjustSliderHeight() {
-                const carousel = document.querySelector("#custom_carousel .carousel-inner");
-                const slides = document.querySelectorAll("#custom_carousel .item");
-                const viewportWidth = window.innerWidth;
-    
-                if (viewportWidth >= 320 && viewportWidth <= 786) {
-                    let maxHeight = 0;
-    
-                    // Calculate the max height of the slides
-                    slides.forEach((slide) => {
-                        slide.style.height = "auto"; // Reset to natural height
-                        const height = slide.offsetHeight;
-                        if (height > maxHeight) {
-                            maxHeight = height;
-                        }
-                    });
-    
-                    // Apply the max height to all slides
-                    slides.forEach((slide) => {
-                        slide.style.height = `${maxHeight}px`;
-                    });
-    
-                    // Ensure the carousel itself adjusts to the height
-                    carousel.style.height = `${maxHeight}px`;
-                } else {
-                    // Reset height for larger or smaller screens
-                    slides.forEach((slide) => {
-                        slide.style.height = "auto";
-                    });
-                    carousel.style.height = "auto";
-                }
-            }
-    
-            // Adjust on page load
-            adjustSliderHeight();
-    
-            // Adjust on window resize
-            window.addEventListener("resize", adjustSliderHeight);
-        });
-    </script>
-
+</div>
 </body>
-
 </html>
